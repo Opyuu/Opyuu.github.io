@@ -1,0 +1,10 @@
+/*styles.css*/
+
+* {
+    font-family: Arial; /*cough i know no fonts*/
+}
+
+.grid {
+    display: grid;
+    
+}
