@@ -6,7 +6,7 @@
 
 .grid {
     display: grid;
-    grid-template-columns: 160px 100px; /*random values*/
+    grid-template-columns: 320px 200px; /*random values*/
 }
 
 .side {
