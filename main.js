@@ -7,3 +7,6 @@ ctx.canvas.width = COLUMNS * BLOCK_SIZE;
 ctx.canvas.height = ROWS * BLOCK_SIZE;
 
 ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+
+board = newBoard();
+console.table(board.grid);
