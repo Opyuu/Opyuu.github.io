@@ -6,5 +6,15 @@
 
 .grid {
     display: grid;
-    
+    grid-template-columns: 160px 100px; /*random values*/
+}
+
+.side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+} /*ict things i learnt*/
+
+.game-board{
+    border: solid 2px;
 }
