@@ -3,7 +3,7 @@
 class Board{ 
     constructor(ctx) {
         this.ctx = ctx;
-        this.grid = newBoard();
+        this.grid = this.newBoard();
     }
 
     newBoard() {
