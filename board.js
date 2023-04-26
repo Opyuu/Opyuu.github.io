@@ -7,20 +7,26 @@ class Board{
     }
 
     newBoard() {
-        return Array.from(
-            {length: ROWS}, () => Array(COLS).fill(0) //empty grid
+        let temp = Array.from(
+            {length: ROWS}, () => Array(COLS).fill(0)
         );
+        for (let i=0; i<COLS; i++){
+            for (let j=0; j<ROWS; j++){
+                temp[i][j] = 0;
+            }
+        }
+        return temp;
     }
     
     render() {
-        
+
         for (let i=0; i<COLS; i++){
             for (let j=0; j<ROWS; j++){
-                if(this.grid[i][j] === 0) continue;
+                if(this.grid[i][j] == 0) continue;
                 this.ctx.fillStyle = PIECE_COLOUR[this.grid[i][j]];
-                this.ctx.drawRect(i*30,ROWS*30-j*30,30,30);
-                // set draw colour
-                // draw one mino
+                
+                this.ctx.fillRect(i,ROWS-j,1,1);
+
             }
         }
     }
