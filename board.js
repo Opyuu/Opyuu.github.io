@@ -1,24 +1,28 @@
 //board.js
-
-class Board{ 
-    constructor(ctx) {
+class Game{
+    constructor(ctx){
         this.ctx = ctx;
-        this.grid = this.newBoard();
+        this.board = this.newBoard()
+        this.piece = 0; // Current falling piece type
+        this.x = 0;
+        this.y = 0;
+        this.rotate = 0; // 0 = North, 1 = East, 2 = South, 3 = West
     }
 
+    // board
     newBoard() {
         let temp = Array.from(
-            {length: ROWS}, () => Array(COLS).fill(0)
+            {length: ROWS+4}, () => Array(COLS).fill(0)
         );
-        for (let i=0; i<COLS; i++){
-            for (let j=0; j<ROWS; j++){
+        for (let i=0; i<10; i++){
+            for (let j=0; j<ROWS+4; j++){
                 temp[i][j] = 0;
             }
         }
         return temp;
     }
     
-    render() {
+    renderBoard() {
         //draw existing pieces
         for (let i=0; i<COLS; i++){
             for (let j=0; j<ROWS; j++){
@@ -46,6 +50,11 @@ class Board{
         
         this.ctx.closePath();
         this.ctx.stroke();
+        
+    }
+
+    //piece
+    renderPiece(){
         
     }
 }

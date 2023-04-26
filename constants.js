@@ -1,6 +1,6 @@
 //constants.js
 const COLS = 10;
-const ROWS = 20;
+const ROWS = 22;
 const BLOCK_SIZE = 30;
 
 const INT_TO_PIECE = ["-", "I", "O", "J", "L", "S", "Z", "T", "#"];

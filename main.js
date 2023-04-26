@@ -21,7 +21,7 @@ function play() {
     //ctx.fillStyle = "green";
     //ctx.fillRect(100, 0, 150, 300);
 
-    board = new Board(ctx);
-    board.render();
+    game = new Game(ctx);
+    game.renderBoard();
 }
 
