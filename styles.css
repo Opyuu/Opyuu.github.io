@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-} /*ict things i learnt*/
+}
 
 .game-board{
     border: solid 2px;
