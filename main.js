@@ -22,9 +22,6 @@ function play() {
     //ctx.fillRect(100, 0, 150, 300);
 
     board = new Board(ctx);
-    board.grid[2][5] = 4;
-    board.grid[3][15] = 3;
-    board.grid[9][4] = 1;
     board.render();
 }
 
