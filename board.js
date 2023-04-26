@@ -8,7 +8,8 @@ class Board{
 
     newBoard() {
         return Array.from(
-            {length: ROWS}, () => Array(COLS).fill(0)
+            {length: ROWS}, () => Array(COLUMNS).fill(0)
         );
     }
+    
 }
