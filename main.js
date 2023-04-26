@@ -8,6 +8,9 @@ ctx.canvas.height = ROWS * BLOCK_SIZE;
 
 ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 
+ctx.fillStyle = "green";
+ctx.fillRect(10, 10, 150, 100);
+
 function play() {
     board = new Board();
     console.table(board.grid);
