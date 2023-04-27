@@ -2,11 +2,13 @@
 class Game{
     constructor(ctx){
         this.ctx = ctx;
-        this.grid = this.newBoard();
-        this.piece = 0; // Current falling piece type
-        this.x = 0;
-        this.y = 0;
-        this.rotation = 0; // 0 = North, 1 = East, 2 = South, 3 = West
+        this.grid;
+        this.piece; // Current falling piece type
+        this.x;
+        this.y;
+        this.rotation; // 0 = North, 1 = East, 2 = South, 3 = West
+        this.bag;
+        this.bagIndex;
     }
 
     // board
@@ -21,6 +23,18 @@ class Game{
         }
         return temp;
     }
+
+    init(){ //initialise stuff, reset all variables
+        this.grid = this.newBoard();
+        this.bag = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7];
+        this.sevenBag(true);
+        this.sevenBag(false);
+        this.bagIndex = 0;
+        this.piece = this.bag[this.bagIndex];
+        this.x = 0;
+        this.y = 0;
+        this.rotation = 0;
+    }
     
     clearBoard(){ // Removes entire playing field from the canvas
         this.ctx.clearRect(0, 0, 10, 24);
@@ -28,7 +42,7 @@ class Game{
 
     renderBoard() { // Draws the existing board onto the canvas
         //clear board
-        this.ctx.clearRect(0, 0, 10, 24);
+        this.clearBoard();
         
         //draw background
         this.ctx.fillStyle = BACKGROUND_COLOUR;
@@ -78,7 +92,7 @@ class Game{
         for (let mino = 0; mino < 4; mino++){
             this.ctx.fillStyle = PIECE_COLOUR[this.piece];
             let drawX = this.x + PIECEX[this.piece][this.rotation][mino];
-            let drawY = ROWS - this.y - PIECEY[this.piece][this.rotation][mino] - 1; // Top row is ROWS - 1
+            let drawY = SPAWNROW - this.y - PIECEY[this.piece][this.rotation][mino];
 
             this.ctx.fillRect(drawX, drawY, 1, 1);
         }
@@ -88,9 +102,28 @@ class Game{
         for (let mino = 0; mino < 4; mino++){
             // this.ctx.fillStyle = PIECE_COLOUR[this.piece];
             let drawX = this.x + PIECEX[this.piece][this.rotation][mino];
-            let drawY = ROWS - this.y - PIECEY[this.piece][this.rotation][mino] - 1; // Top row is ROWS - 1
+            let drawY = SPAWNROW - this.y - PIECEY[this.piece][this.rotation][mino];
 
             this.ctx.clearRect(drawX, drawY, 1, 1);
+        }
+    }
+
+    //7 bag randomising system
+    sevenBag(shuffle_first_bag){ //contains 2 bags
+        //idea is that we loop through the entire 2 bags as the queue
+        //while looping the first bag, the second bag can be shuffled
+        //while looping the second bag, the first bag can be shuffled
+        if (shuffle_first_bag == true){ //shuffle the first bag
+            for (let i = 6; i >= 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [this.bag[i], this.bag[j]] = [this.bag[j], this.bag[i]];
+            }
+        }
+        else{                           //shuffle the second bag
+            for (let i = 13; i >= 7; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [this.bag[i], this.bag[j]] = [this.bag[j], this.bag[i]];
+            }
         }
     }
 }
