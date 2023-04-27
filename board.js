@@ -47,9 +47,10 @@ class Game{
             this.ctx.moveTo(i,4);
             this.ctx.lineTo(i,ROWS);
         }
-        for (let j=4; j<ROWS; j++){ //vertical
+        for (let j=ROWS-1; j>3; j--){ //vertical
             this.ctx.moveTo(0,j);
             this.ctx.lineTo(10,j);
+            console.log(j);
         }
         this.ctx.closePath();
         this.ctx.stroke();
