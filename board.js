@@ -6,7 +6,7 @@ class Game{
         this.piece = 0; // Current falling piece type
         this.x = 0;
         this.y = 0;
-        this.rotate = 0; // 0 = North, 1 = East, 2 = South, 3 = West
+        this.rotation = 0; // 0 = North, 1 = East, 2 = South, 3 = West
     }
 
     // board
@@ -50,7 +50,6 @@ class Game{
         for (let j=ROWS-1; j>3; j--){ //vertical
             this.ctx.moveTo(0,j);
             this.ctx.lineTo(10,j);
-            console.log(j);
         }
         this.ctx.closePath();
         this.ctx.stroke();
@@ -72,6 +71,12 @@ class Game{
 
     //piece
     renderPiece(){
+        for (let mino = 0; mino < 4; mino++){
+            this.ctx.fillStyle = PIECE_COLOUR[this.piece];
+            let drawX = this.x + PIECEX[this.piece][this.rotation][mino];
+            let drawY = ROWS - this.y - PIECEY[this.piece][this.rotation][mino] - 1; // Top row is ROWS - 1
 
+            this.ctx.fillRect(drawX, drawY, 1, 1);
+        }
     }
 }
