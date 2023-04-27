@@ -22,7 +22,11 @@ class Game{
         return temp;
     }
     
-    renderBoard() {
+    clearBoard(){ // Removes entire playing field from the canvas
+        this.ctx.clearRect(0, 0, 10, 24);
+    }
+
+    renderBoard() { // Draws the existing board onto the canvas
         //clear board
         this.ctx.clearRect(0, 0, 10, 24);
         
@@ -77,6 +81,16 @@ class Game{
             let drawY = ROWS - this.y - PIECEY[this.piece][this.rotation][mino] - 1; // Top row is ROWS - 1
 
             this.ctx.fillRect(drawX, drawY, 1, 1);
+        }
+    }
+
+    clearPiece(){
+        for (let mino = 0; mino < 4; mino++){
+            // this.ctx.fillStyle = PIECE_COLOUR[this.piece];
+            let drawX = this.x + PIECEX[this.piece][this.rotation][mino];
+            let drawY = ROWS - this.y - PIECEY[this.piece][this.rotation][mino] - 1; // Top row is ROWS - 1
+
+            this.ctx.clearRect(drawX, drawY, 1, 1);
         }
     }
 }

@@ -11,10 +11,11 @@ ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 function play() {
     game = new Game(ctx);
     game.renderBoard();
-    game.piece = 7;
     game.x = 5;
     game.y = 5;
+    game.piece = 7;
     game.rotation = 3;
     game.renderPiece();
+    game.clearPiece();
 }
 
