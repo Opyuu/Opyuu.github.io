@@ -1,12 +1,16 @@
 /*styles.css*/
 
 * {
-    font-family: Arial; /*cough i know no fonts*/
+    font-family: Arial;
+}
+
+body {
+    background-color: gray;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: 320px 200px; /*random values*/
+    grid-template-columns: 320px 200px;
 }
 
 .side {
@@ -15,9 +19,9 @@
     justify-content: space-between;
 }
 
-.game-board{
+/* .game-board{
     border: solid 2px;
-}
+} */
 
 .play-button{
     background-color: green;
