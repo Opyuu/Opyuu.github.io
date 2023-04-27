@@ -1,6 +1,8 @@
 //constants.js
 const COLS = 10;
 const ROWS = 24;
+const SPAWNROW = 23
+
 const BLOCK_SIZE = 30;
 const BORDER_SIZE = 5;
 const GRID_SIZE = 1;
