@@ -42,7 +42,7 @@ class Game{
 
     renderBoard() { // Draws the existing board onto the canvas
         //clear board
-        this.ctx.clearRect(0, 0, 10, 24);
+        this.clearBoard();
         
         //draw background
         this.ctx.fillStyle = BACKGROUND_COLOUR;
@@ -126,5 +126,4 @@ class Game{
             }
         }
     }
-
 }
