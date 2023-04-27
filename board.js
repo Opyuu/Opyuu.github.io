@@ -23,9 +23,12 @@ class Game{
     }
     
     renderBoard() {
+        //clear board
+        this.ctx.clearRect(0, 0, 10, 24);
+        
         //draw background
         this.ctx.fillStyle = BACKGROUND_COLOUR;
-        this.ctx.fillRect(0, 2, 10, 22);
+        this.ctx.fillRect(0, 4, 10, 20);
 
         //draw existing pieces
         for (let i=0; i<COLS; i++){
@@ -39,13 +42,12 @@ class Game{
         //draw grid lines
         this.ctx.lineWidth = GRID_SIZE/BLOCK_SIZE;
         this.ctx.strokeStyle = GRID_COLOUR;
-        this.ctx.moveTo(1,0);
         this.ctx.beginPath();
         for (let i=1; i<COLS; i++){ //horizontal
-            this.ctx.moveTo(i,2);
+            this.ctx.moveTo(i,4);
             this.ctx.lineTo(i,ROWS);
         }
-        for (let j=3; j<ROWS; j++){ //vertical
+        for (let j=4; j<ROWS; j++){ //vertical
             this.ctx.moveTo(0,j);
             this.ctx.lineTo(10,j);
         }
@@ -55,13 +57,20 @@ class Game{
         //draw border lines
         this.ctx.lineWidth = BORDER_SIZE/BLOCK_SIZE;
         this.ctx.strokeStyle = BORDER_COLOUR;
-        this.ctx.strokeRect(0, 2, 10, 22);
-
-        
+        //this.ctx.strokeRect(0, 4, 10, 20);
+        this.ctx.beginPath();
+        this.ctx.moveTo(0,4);
+        this.ctx.lineTo(0,24);
+        this.ctx.moveTo(0,24);
+        this.ctx.lineTo(10,24);
+        this.ctx.moveTo(10,24);
+        this.ctx.lineTo(10,4);
+        this.ctx.closePath();
+        this.ctx.stroke();
     }
 
     //piece
     renderPiece(){
-        
+
     }
 }
