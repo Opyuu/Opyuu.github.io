@@ -1,6 +1,12 @@
 //board.js
 class Game{
-    constructor(ctx){
+    constructor(){
+        const canvas = document.getElementById("board");
+        const ctx = canvas.getContext("2d");
+        ctx.canvas.width = COLS * BLOCK_SIZE;
+        ctx.canvas.height = ROWS * BLOCK_SIZE;
+        ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+
         this.ctx = ctx;
         this.grid;
         this.piece; // Current falling piece type
