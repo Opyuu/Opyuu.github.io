@@ -31,8 +31,8 @@ class Game{
         this.sevenBag(false);
         this.bagIndex = 0;
         this.piece = this.bag[this.bagIndex];
-        this.x = 0;
-        this.y = 0;
+        this.x = 3;
+        this.y = 22;
         this.rotation = 0;
     }
     
@@ -91,36 +91,58 @@ class Game{
     renderPiece(){
         for (let mino = 0; mino < 4; mino++){
             this.ctx.fillStyle = PIECE_COLOUR[this.piece];
-            let drawX = this.x + PIECEX[this.piece][this.rotation][mino];
-            let drawY = SPAWNROW - this.y - PIECEY[this.piece][this.rotation][mino];
+            let drawX = this.x + PIECE_X[this.piece][this.rotation][mino];
+            let drawY = SPAWNROW - this.y - PIECE_Y[this.piece][this.rotation][mino];
 
             this.ctx.fillRect(drawX, drawY, 1, 1);
         }
     }
 
-    clearPiece(){
-        for (let mino = 0; mino < 4; mino++){
-            // this.ctx.fillStyle = PIECE_COLOUR[this.piece];
-            let drawX = this.x + PIECEX[this.piece][this.rotation][mino];
-            let drawY = SPAWNROW - this.y - PIECEY[this.piece][this.rotation][mino];
+    // clearPiece(){
+    //     for (let mino = 0; mino < 4; mino++){
+    //         // this.ctx.fillStyle = PIECE_COLOUR[this.piece];
+    //         let drawX = this.x + PIECE_X[this.piece][this.rotation][mino];
+    //         let drawY = SPAWNROW - this.y - PIECE_Y[this.piece][this.rotation][mino];
 
-            this.ctx.clearRect(drawX, drawY, 1, 1);
+    //         this.ctx.clearRect(drawX, drawY, 1, 1);
+    //     }
+    // }
+
+    placePiece(){ //places existing piece into board
+        for (let mino = 0; mino < 4; mino++){
+            this.grid   [ this.x + PIECE_X[this.piece][this.rotation][mino] ]
+                        [ this.y + PIECE_Y[this.piece][this.rotation][mino] ] = this.piece;
+        }
+        this.clearBoard();
+        this.renderBoard();
+        this.x = 3;
+        this.y = 22;
+        this.bagIncrement();
+    }
+
+    //bag
+    bagIncrement(){ //increment bag
+        this.bagIndex++;
+        if (this.bagIndex == 7){
+            this.sevenBag(true);
+        }
+        if (this.bagIndex == 15){
+            this.sevenBag(false); this.bagIndex = 0;
         }
     }
 
-    //7 bag randomising system
     sevenBag(shuffle_first_bag){ //contains 2 bags
         //idea is that we loop through the entire 2 bags as the queue
         //while looping the first bag, the second bag can be shuffled
         //while looping the second bag, the first bag can be shuffled
         if (shuffle_first_bag == true){ //shuffle the first bag
-            for (let i = 6; i >= 0; i--) {
+            for (let i = 6; i >= 0; i--){
                 let j = Math.floor(Math.random() * (i + 1));
                 [this.bag[i], this.bag[j]] = [this.bag[j], this.bag[i]];
             }
         }
         else{                           //shuffle the second bag
-            for (let i = 13; i >= 7; i--) {
+            for (let i = 13; i >= 7; i--){
                 let j = Math.floor(Math.random() * (i + 1));
                 [this.bag[i], this.bag[j]] = [this.bag[j], this.bag[i]];
             }

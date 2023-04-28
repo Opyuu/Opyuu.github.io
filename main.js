@@ -12,11 +12,12 @@ function play() {
     game = new Game(ctx);
     game.init();
     game.renderBoard();
-    game.x = 5;
-    game.y = 5;
-    game.piece = 7;
+    game.x = -1;
+    game.y = 3;
+    game.piece = 1;
     game.rotation = 3;
-    game.renderPiece();
-    game.clearPiece();
+    game.placePiece();
+    //game.renderPiece();
+    //game.clearPiece();
 }
 

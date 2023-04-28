@@ -10,7 +10,7 @@
 ];
 */
 // ["-", "I", "O", "J", "L", "S", "Z", "T", "#"];
-const PIECEX = [
+const PIECE_X = [
     [],
     [[0, 1, 2, 3], [2, 2, 2, 2], [0, 1, 2, 3], [1, 1, 1, 1]],
     [[1, 2, 1, 2], [1, 2, 1, 2], [1, 2, 1, 2], [1, 2, 1, 2]],
@@ -22,7 +22,7 @@ const PIECEX = [
 
 ]; // [piece][rotation state][mino], returns x-distance from top left of piece of each mino
 
-const PIECEY = [
+const PIECE_Y = [
     [],
     [[-1, -1, -1, -1], [0, -1, -2, -3], [-2, -2, -2, -2], [0, -1, -2, -3]],
     [[0, 0, -1, -1], [0, 0, -1, -1], [0, 0, -1, -1], [0, 0, -1, -1]],
