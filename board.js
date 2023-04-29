@@ -183,4 +183,89 @@ class Game{
             }
         }
     }
+
+    isValid(piece, rotation, x, y){ // Checks if the inputted position is a valid position
+        rotation = rotation % 4;
+        try{
+            for (let mino = 0; mino < 4; mino ++){
+                if (this.grid[x + PIECE_X[piece][rotation][mino]]
+                    [y + PIECE_Y[piece][rotation][mino]] !== 0){ // If this mino position isn't 0, return false
+                    return false;
+                }
+                
+            }
+            return true; // If it isn't not valid, it must be valid
+        }catch(error){
+            return false; // If the piece would clip out of the board array it would be invalid too
+        }
+    }
+
+    moveLeft(){ // Moves the current piece left if it is a valid position, otherwise nothing happens
+        if (this.isValid(this.piece, this.rotation, this.x - 1, this.y)){
+            this.x--;
+        }
+    }
+
+    moveRight(){ // Moves the current piece right if it is a valid position, otherwise nothing happens
+        if (this.isValid(this.piece, this.rotation, this.x + 1, this.y)){
+            this.x++;
+        }
+    }
+
+    moveDown(){
+        if (this.isValid(this.piece, this.rotation, this.x, this.y)){
+            this.y--;
+            return true;
+        }
+        return false
+    }
+
+    rotateCW(){
+        if (this.piece === 2)return; // O piece has no kicks and or rotations
+
+        for (let kick = 0; kick < 5; kick++){
+            if (this.piece == 1){
+                if ( this.isValid(this.piece, this.rotation + 1, this.x + CW_I_KICKS_X[this.rotation][kick], this.y + CW_I_KICKS_Y[this.rotation][kick]) ){
+                    this.x = this.x + CW_I_KICKS_X[this.rotation][kick];
+                    this.y = this.y + CW_I_KICKS_Y[this.rotation][kick];
+                    this.rotation = this.rotation + 1;
+                    this.rotation = this.rotation % 4;
+                    return;
+                }
+            } else{
+                if ( this.isValid(this.piece, this.rotation + 1, this.x + CW_KICKS_X[this.rotation][kick], this.y + CW_KICKS_Y[this.rotation][kick]) ){
+                    this.x = this.x + CW_KICKS_X[this.rotation][kick];
+                    this.y = this.y + CW_KICKS_Y[this.rotation][kick];
+                    this.rotation = this.rotation + 1;
+                    this.rotation = this.rotation % 4;
+                    return;
+                }
+            }
+        }
+    }
+
+    rotateCCW(){
+        this.rotation = this.rotation + 4; // Make sure rotation doesn't reach negative
+        if (this.piece === 2)return; // O piece has no kicks and or rotations
+
+        for (let kick = 0; kick < 5; kick++){
+            if (this.piece == 1){
+                if ( this.isValid(this.piece, this.rotation - 1, this.x + CCW_I_KICKS_X[this.rotation][kick], this.y + CCW_I_KICKS_Y[this.rotation][kick]) ){
+                    this.x = this.x + CCW_I_KICKS_X[this.rotation][kick];
+                    this.y = this.y + CCW_I_KICKS_Y[this.rotation][kick];
+                    this.rotation = this.rotation - 1;
+                    this.rotation = this.rotation % 4;
+                    return;
+                }
+            } else{
+                if ( this.isValid(this.piece, this.rotation - 1, this.x + CCW_KICKS_X[this.rotation][kick], this.y + CCW_KICKS_Y[this.rotation][kick]) ){
+                    this.x = this.x + CCW_KICKS_X[this.rotation][kick];
+                    this.y = this.y + CCW_KICKS_Y[this.rotation][kick];
+                    this.rotation = this.rotation - 1;
+                    this.rotation = this.rotation % 4;
+                    return;
+                }
+            }
+        }
+    }
 }
