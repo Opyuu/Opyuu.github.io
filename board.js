@@ -117,7 +117,9 @@ class Game{
 
         //draw pieces
         let y_offset = 1;
-        for (let tempIndex = this.bagIndex; tempIndex < 5; tempIndex++){
+        let limit = this.bagIndex + 5;
+        if (limit >= 14){limit -= 14;}
+        for (let tempIndex = this.bagIndex; tempIndex != limit; tempIndex++){
             this.queue_ctx.fillStyle = PIECE_COLOUR[this.bag[tempIndex]];
             for (let mino = 0; mino < 4; mino++){
                 let drawX = PIECE_X[this.bag[tempIndex]][0][mino];
@@ -125,8 +127,9 @@ class Game{
                 this.queue_ctx.fillRect(drawX, drawY, 1, 1);
             }
             y_offset += 3;
+            if (tempIndex >= 13){tempIndex -= 14;}
         }
-
+        
         //draw border lines
         // this.queue_ctx.lineWidth = BORDER_SIZE/10;
         // this.queue_ctx.strokeStyle = BORDER_COLOUR;
@@ -143,6 +146,12 @@ class Game{
         }
     }
 
+    spawnPiece(){ //spawn piece
+        this.x = 3;
+        this.y = 22;
+        this.piece = this.bag[this.bagIndex];
+    }
+
     placePiece(){ //places existing piece into board
         for (let mino = 0; mino < 4; mino++){
             this.grid   [ this.x + PIECE_X[this.piece][this.rotation][mino] ]
@@ -150,9 +159,9 @@ class Game{
         }
         this.clearBoard();
         this.renderBoard();
-        this.x = 3;
-        this.y = 22;
         this.bagIncrement();
+        this.renderQueue();
+        this.spawnPiece();
     }
 
     //bag
@@ -161,7 +170,7 @@ class Game{
         if (this.bagIndex == 7){
             this.sevenBag(true);
         }
-        if (this.bagIndex == 15){
+        if (this.bagIndex == 14){
             this.sevenBag(false); this.bagIndex = 0;
         }
     }
@@ -177,9 +186,9 @@ class Game{
             }
         }
         else{                           //shuffle the second bag
-            for (let i = 13; i > 7; i--){
-                let j = Math.floor(Math.random() * (i + 1)) + 6;
-                [this.bag[i], this.bag[j]] = [this.bag[j], this.bag[i]];
+            for (let i = 6; i > 0; i--){
+                let j = Math.floor(Math.random() * (i + 1));
+                [this.bag[i+7], this.bag[j+7]] = [this.bag[j+7], this.bag[i+7]];
             }
         }
     }
