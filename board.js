@@ -99,6 +99,11 @@ class Game{
         this.ctx.closePath();
         this.ctx.stroke();
     }
+    update(){
+        this.renderBoard();
+        this.renderQueue();
+        this.renderPiece();
+    }
 
     //queue
     clearQueue(){
@@ -149,9 +154,7 @@ class Game{
         this.piece = this.bag[this.bagIndex];
         this.rotation = 0;
         this.bagIncrement();
-        this.renderBoard();
-        this.renderQueue();
-        this.renderPiece();
+        this.update();
     }
 
     placePiece(){ //places existing piece into board
@@ -160,6 +163,72 @@ class Game{
                         [ this.y + PIECE_Y[this.piece][this.rotation][mino] ] = this.piece;
         }
         this.spawnPiece();
+    }
+
+
+    isValid(piece, rotation, x, y){ // Checks if the inputted position is a valid position
+        return ((this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][0]] === 0) +
+                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][1]] === 0) +
+                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][2]] === 0) +
+                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][3]] === 0) === 4);
+    }
+
+    moveLeft(){ // Moves the current piece left if it is a valid position, otherwise nothing happens
+        if (this.isValid(this.piece, this.rotation, this.x - 1, this.y)){
+            this.update();
+            this.x--;
+        }
+    }
+
+    moveRight(){ // Moves the current piece right if it is a valid position, otherwise nothing happens
+        if (this.isValid(this.piece, this.rotation, this.x + 1, this.y)){
+            this.update();
+            this.x++;
+        }
+    }
+
+    moveDown(){
+        if (this.isValid(this.piece, this.rotation, this.x, this.y - 1)){
+            this.y--;
+            this.update();
+            return true;
+        }
+        return false
+    }
+
+    rotateCW(){
+        if (this.piece === 2)return; // O piece has no kicks and or rotations
+
+        for (let kick = 0; kick < 5; kick++){
+                if ( this.isValid(this.piece, rotation_CW[this.rotation],
+                    this.x + CW_KICKS_X[+(this.piece==1)][this.rotation][kick], 
+                    this.y + CW_KICKS_Y[+(this.piece==1)][this.rotation][kick]) ){
+
+                    this.x = this.x + CW_KICKS_X[+(this.piece==1)][this.rotation][kick];
+                    this.y = this.y + CW_KICKS_Y[+(this.piece==1)][this.rotation][kick];
+                    this.rotation = rotation_CW[this.rotation];
+                    this.update();
+
+                    return;
+                }
+        }
+    }
+
+    rotateCCW(){
+        if (this.piece === 2)return; // O piece has no kicks and or rotations
+
+        for (let kick = 0; kick < 5; kick++){
+            if ( this.isValid(this.piece, rotation_CCW[this.rotation],
+                this.x + CCW_KICKS_X[+(this.piece==1)][this.rotation][kick], 
+                this.y + CCW_KICKS_Y[+(this.piece==1)][this.rotation][kick]) ){
+                
+                this.x = this.x + CCW_KICKS_X[+(this.piece==1)][this.rotation][kick];
+                this.y = this.y + CCW_KICKS_Y[+(this.piece==1)][this.rotation][kick];
+                this.rotation = rotation_CCW[this.rotation];
+                this.update();
+                return;
+            }
+        }
     }
 
     //bag
@@ -187,66 +256,6 @@ class Game{
             for (let i = 6; i > 0; i--){
                 let j = Math.floor(Math.random() * (i + 1));
                 [this.bag[i+7], this.bag[j+7]] = [this.bag[j+7], this.bag[i+7]];
-            }
-        }
-    }
-
-    isValid(piece, rotation, x, y){ // Checks if the inputted position is a valid position
-        return ((this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][0]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][1]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][2]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][3]] === 0) == 4);
-    }
-
-    moveLeft(){ // Moves the current piece left if it is a valid position, otherwise nothing happens
-        if (this.isValid(this.piece, this.rotation, this.x - 1, this.y)){
-            this.x--;
-        }
-    }
-
-    moveRight(){ // Moves the current piece right if it is a valid position, otherwise nothing happens
-        if (this.isValid(this.piece, this.rotation, this.x + 1, this.y)){
-            this.x++;
-        }
-    }
-
-    moveDown(){
-        if (this.isValid(this.piece, this.rotation, this.x, this.y - 1)){
-            this.y--;
-            return true;
-        }
-        return false
-    }
-
-    rotateCW(){
-        if (this.piece === 2)return; // O piece has no kicks and or rotations
-
-        for (let kick = 0; kick < 5; kick++){
-                if ( this.isValid(this.piece, this.rotation + 1, 
-                    this.x + CW_KICKS_X[this.piece == 1][this.rotation][kick], 
-                    this.y + CW_KICKS_Y[this.piece == 1][this.rotation][kick]) ){
-
-                    this.x = this.x + CW_KICKS_X[this.piece == 1][this.rotation][kick];
-                    this.y = this.y + CW_KICKS_Y[this.piece == 1][this.rotation][kick];
-                    this.rotation = rotation_CW[this.rotation];
-                    return;
-                }
-        }
-    }
-
-    rotateCCW(){
-        this.rotation = this.rotation + 4; // Make sure rotation doesn't reach negative
-        if (this.piece === 2)return; // O piece has no kicks and or rotations
-
-        for (let kick = 0; kick < 5; kick++){
-            if ( this.isValid(this.piece, this.rotation - 1, 
-                this.x + CCW_KICKS_X[this.piece == 1][this.rotation][kick], 
-                this.y + CCW_KICKS_Y[this.piece == 1][this.rotation][kick]) ){
-                
-                this.x = this.x + CCW_KICKS_X[this.piece == 1][this.rotation][kick];
-                this.y = this.y + CCW_KICKS_Y[this.piece == 1][this.rotation][kick];
-                this.rotation = rotation_CCW[this.rotation];
-                return;
             }
         }
     }
