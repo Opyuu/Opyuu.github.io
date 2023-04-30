@@ -50,6 +50,8 @@ function play() {
             if(game.tookAction['KeyS'] !== true && game.keys['KeyS']) {game.rotateCCW(); game.tookAction['KeyS'] = true;}
             if(game.tookAction['KeyZ'] !== true && game.keys['KeyZ']) {game.rotateCCW(); game.tookAction['KeyZ'] = true;}
 
+            if(game.tookAction['KeyA'] !== true && game.keys['KeyA']) {game.rotate180(); game.tookAction['KeyA'] = true;}
+
             if(game.tookAction['ShiftLeft'] !== true && game.keys['ShiftLeft']) {game.holdPiece(); game.tookAction['ShiftLeft'] = true;}
 
             if(game.tookAction['Space'] !== true && game.keys['Space']) {

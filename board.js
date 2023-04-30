@@ -257,6 +257,22 @@ class Game{
         }
     }
 
+    rotate180(){
+        if (this.piece === 2) return; // O piece has no kicks and or rotations
+        for (let kick = 0; kick < 6; kick++){
+            if ( this.isValid(this.piece, rotation_180[this.rotation],
+                this.x + KICKS_180_X[this.rotation][kick],
+                this.y + KICKS_180_Y[this.rotation][kick]) ){
+                
+                this.x = this.x + KICKS_180_X[this.rotation][kick];
+                this.y = this.y + KICKS_180_Y[this.rotation][kick];
+                this.rotation = rotation_180[this.rotation];
+
+                return;
+            }  
+        }
+    }
+
     //hold
     holdPiece(){
         if (this.canHold == false) return;
@@ -311,7 +327,4 @@ class Game{
         }
     }
 
-    hold(){
-        console.log("you have held");
-    }
 }
