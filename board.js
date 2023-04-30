@@ -9,20 +9,29 @@ game_ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 
 const queue_canvas = document.getElementById("queue");
 const queue_ctx = queue_canvas.getContext("2d");
-queue_ctx.canvas.width = 4 * BLOCK_SIZE;
+queue_ctx.canvas.width = 5 * BLOCK_SIZE;
 queue_ctx.canvas.height = 16 * BLOCK_SIZE;
 queue_ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+
+const hold_canvas = document.getElementById("hold");
+const hold_ctx = hold_canvas.getContext("2d");
+hold_ctx.canvas.width = 4 * BLOCK_SIZE;
+hold_ctx.canvas.height = 4 * BLOCK_SIZE;
+hold_ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 
 
 class Game{
     constructor(){
         this.ctx = game_ctx;
         this.queue_ctx = queue_ctx;
+        this.hold_ctx = hold_ctx;
         this.grid;
         this.piece; // Current falling piece type
         this.x;
         this.y;
         this.rotation; // 0 = North, 1 = East, 2 = South, 3 = West
+        this.hold;
+        this.canHold;
         this.bag;
         this.bagIndex;
     }
@@ -46,7 +55,10 @@ class Game{
         this.sevenBag(true);
         this.sevenBag(false);
         this.bagIndex = 0;
+        this.hold = 0;
+        this.canHold = true;
         this.spawnPiece();
+        this.update_render();
     }
     
     clearBoard(){ // Removes entire playing field from the canvas
@@ -99,15 +111,17 @@ class Game{
         this.ctx.closePath();
         this.ctx.stroke();
     }
-    update(){
+
+    update_render(){
         this.renderBoard();
         this.renderQueue();
         this.renderPiece();
+        this.renderHold();
     }
 
     //queue
     clearQueue(){
-        this.queue_ctx.clearRect(0, 0, 4, 15);
+        this.queue_ctx.clearRect(0, 0, 5, 16);
     }
 
     renderQueue(){
@@ -126,7 +140,7 @@ class Game{
             for (let mino = 0; mino < 4; mino++){
                 let drawX = PIECE_X[this.bag[tempIndex]][0][mino];
                 let drawY = y_offset - PIECE_Y[this.bag[tempIndex]][0][mino];
-                this.queue_ctx.fillRect(drawX, drawY, 1, 1);
+                this.queue_ctx.fillRect(1+ drawX, drawY, 1, 1);
             }
             y_offset += 3;
             if (tempIndex >= 13){tempIndex -= 14;}
@@ -154,7 +168,6 @@ class Game{
         this.piece = this.bag[this.bagIndex];
         this.rotation = 0;
         this.bagIncrement();
-        this.update();
     }
 
     placePiece(){ //places existing piece into board
@@ -163,26 +176,27 @@ class Game{
                         [ this.y + PIECE_Y[this.piece][this.rotation][mino] ] = this.piece;
         }
         this.spawnPiece();
+        this.update_render();
+        this.canHold = true;
     }
-
 
     isValid(piece, rotation, x, y){ // Checks if the inputted position is a valid position
         return ((this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][0]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][1]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][2]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][3]] === 0) === 4);
+                (this.grid[x + PIECE_X[piece][rotation][1]][y + PIECE_Y[piece][rotation][1]] === 0) +
+                (this.grid[x + PIECE_X[piece][rotation][2]][y + PIECE_Y[piece][rotation][2]] === 0) +
+                (this.grid[x + PIECE_X[piece][rotation][3]][y + PIECE_Y[piece][rotation][3]] === 0) === 4);
     }
 
     moveLeft(){ // Moves the current piece left if it is a valid position, otherwise nothing happens
         if (this.isValid(this.piece, this.rotation, this.x - 1, this.y)){
-            this.update();
+            this.update_render();
             this.x--;
         }
     }
 
     moveRight(){ // Moves the current piece right if it is a valid position, otherwise nothing happens
         if (this.isValid(this.piece, this.rotation, this.x + 1, this.y)){
-            this.update();
+            this.update_render();
             this.x++;
         }
     }
@@ -190,7 +204,7 @@ class Game{
     moveDown(){
         if (this.isValid(this.piece, this.rotation, this.x, this.y - 1)){
             this.y--;
-            this.update();
+            this.update_render();
             return true;
         }
         return false
@@ -207,7 +221,7 @@ class Game{
                     this.x = this.x + CW_KICKS_X[+(this.piece==1)][this.rotation][kick];
                     this.y = this.y + CW_KICKS_Y[+(this.piece==1)][this.rotation][kick];
                     this.rotation = rotation_CW[this.rotation];
-                    this.update();
+                    this.update_render();
 
                     return;
                 }
@@ -225,9 +239,36 @@ class Game{
                 this.x = this.x + CCW_KICKS_X[+(this.piece==1)][this.rotation][kick];
                 this.y = this.y + CCW_KICKS_Y[+(this.piece==1)][this.rotation][kick];
                 this.rotation = rotation_CCW[this.rotation];
-                this.update();
+                this.update_render();
+
                 return;
             }
+        }
+    }
+
+    //hold
+    holdPiece(){
+        if (this.canHold == false) return;
+        [this.hold, this.piece] = [this.piece, this.hold];
+        this.canHold = false;
+        if(this.piece === 0){
+            this.spawnPiece();
+        }
+        this.update_render();
+    }
+
+    clearHold(){
+        this.hold_ctx.clearRect(0, 0, 4, 4);
+    }
+
+    renderHold(){
+        this.clearHold();
+
+        this.hold_ctx.fillStyle = PIECE_COLOUR[this.hold];
+        for (let mino = 0; mino < 4; mino++){
+            let drawX = PIECE_X[this.hold][0][mino];
+            let drawY = - PIECE_Y[this.hold][0][mino];
+            this.hold_ctx.fillRect(drawX, drawY, 1, 1);
         }
     }
 
