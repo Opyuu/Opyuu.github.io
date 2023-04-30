@@ -194,19 +194,10 @@ class Game{
     }
 
     isValid(piece, rotation, x, y){ // Checks if the inputted position is a valid position
-        rotation = rotation % 4;
-        try{
-            for (let mino = 0; mino < 4; mino ++){
-                if (this.grid[x + PIECE_X[piece][rotation][mino]]
-                    [y + PIECE_Y[piece][rotation][mino]] !== 0){ // If this mino position isn't 0, return false
-                    return false;
-                }
-                
-            }
-            return true; // If it isn't not valid, it must be valid
-        }catch(error){
-            return false; // If the piece would clip out of the board array it would be invalid too
-        }
+        return ((this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][0]] === 0) +
+                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][1]] === 0) +
+                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][2]] === 0) +
+                (this.grid[x + PIECE_X[piece][rotation][0]][y + PIECE_Y[piece][rotation][3]] === 0) == 4);
     }
 
     moveLeft(){ // Moves the current piece left if it is a valid position, otherwise nothing happens
@@ -222,7 +213,7 @@ class Game{
     }
 
     moveDown(){
-        if (this.isValid(this.piece, this.rotation, this.x, this.y)){
+        if (this.isValid(this.piece, this.rotation, this.x, this.y - 1)){
             this.y--;
             return true;
         }
@@ -233,23 +224,15 @@ class Game{
         if (this.piece === 2)return; // O piece has no kicks and or rotations
 
         for (let kick = 0; kick < 5; kick++){
-            if (this.piece == 1){
-                if ( this.isValid(this.piece, this.rotation + 1, this.x + CW_I_KICKS_X[this.rotation][kick], this.y + CW_I_KICKS_Y[this.rotation][kick]) ){
-                    this.x = this.x + CW_I_KICKS_X[this.rotation][kick];
-                    this.y = this.y + CW_I_KICKS_Y[this.rotation][kick];
-                    this.rotation = this.rotation + 1;
-                    this.rotation = this.rotation % 4;
+                if ( this.isValid(this.piece, this.rotation + 1, 
+                    this.x + CW_KICKS_X[this.piece == 1][this.rotation][kick], 
+                    this.y + CW_KICKS_Y[this.piece == 1][this.rotation][kick]) ){
+
+                    this.x = this.x + CW_KICKS_X[this.piece == 1][this.rotation][kick];
+                    this.y = this.y + CW_KICKS_Y[this.piece == 1][this.rotation][kick];
+                    this.rotation = rotation_CW[this.rotation];
                     return;
                 }
-            } else{
-                if ( this.isValid(this.piece, this.rotation + 1, this.x + CW_KICKS_X[this.rotation][kick], this.y + CW_KICKS_Y[this.rotation][kick]) ){
-                    this.x = this.x + CW_KICKS_X[this.rotation][kick];
-                    this.y = this.y + CW_KICKS_Y[this.rotation][kick];
-                    this.rotation = this.rotation + 1;
-                    this.rotation = this.rotation % 4;
-                    return;
-                }
-            }
         }
     }
 
@@ -258,22 +241,14 @@ class Game{
         if (this.piece === 2)return; // O piece has no kicks and or rotations
 
         for (let kick = 0; kick < 5; kick++){
-            if (this.piece == 1){
-                if ( this.isValid(this.piece, this.rotation - 1, this.x + CCW_I_KICKS_X[this.rotation][kick], this.y + CCW_I_KICKS_Y[this.rotation][kick]) ){
-                    this.x = this.x + CCW_I_KICKS_X[this.rotation][kick];
-                    this.y = this.y + CCW_I_KICKS_Y[this.rotation][kick];
-                    this.rotation = this.rotation - 1;
-                    this.rotation = this.rotation % 4;
-                    return;
-                }
-            } else{
-                if ( this.isValid(this.piece, this.rotation - 1, this.x + CCW_KICKS_X[this.rotation][kick], this.y + CCW_KICKS_Y[this.rotation][kick]) ){
-                    this.x = this.x + CCW_KICKS_X[this.rotation][kick];
-                    this.y = this.y + CCW_KICKS_Y[this.rotation][kick];
-                    this.rotation = this.rotation - 1;
-                    this.rotation = this.rotation % 4;
-                    return;
-                }
+            if ( this.isValid(this.piece, this.rotation - 1, 
+                this.x + CCW_KICKS_X[this.piece == 1][this.rotation][kick], 
+                this.y + CCW_KICKS_Y[this.piece == 1][this.rotation][kick]) ){
+                
+                this.x = this.x + CCW_KICKS_X[this.piece == 1][this.rotation][kick];
+                this.y = this.y + CCW_KICKS_Y[this.piece == 1][this.rotation][kick];
+                this.rotation = rotation_CCW[this.rotation];
+                return;
             }
         }
     }
