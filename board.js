@@ -46,10 +46,7 @@ class Game{
         this.sevenBag(true);
         this.sevenBag(false);
         this.bagIndex = 0;
-        this.piece = this.bag[this.bagIndex];
-        this.x = 3;
-        this.y = 22;
-        this.rotation = 0;
+        this.spawnPiece();
     }
     
     clearBoard(){ // Removes entire playing field from the canvas
@@ -150,6 +147,11 @@ class Game{
         this.x = 3;
         this.y = 22;
         this.piece = this.bag[this.bagIndex];
+        this.rotation = 0;
+        this.bagIncrement();
+        this.renderBoard();
+        this.renderQueue();
+        this.renderPiece();
     }
 
     placePiece(){ //places existing piece into board
@@ -157,10 +159,6 @@ class Game{
             this.grid   [ this.x + PIECE_X[this.piece][this.rotation][mino] ]
                         [ this.y + PIECE_Y[this.piece][this.rotation][mino] ] = this.piece;
         }
-        this.clearBoard();
-        this.renderBoard();
-        this.bagIncrement();
-        this.renderQueue();
         this.spawnPiece();
     }
 
