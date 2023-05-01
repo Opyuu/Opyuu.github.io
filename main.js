@@ -5,11 +5,15 @@ var tookAction;
 var softDrop;
 var leftDas;
 var rightDas;
+var das;
 
 game = new Game();
 gameRunning = false; //temp fix
 
 function play() {
+    das = 5; // DAS in frames
+    leftDas = 0;
+    rightDas = 0;
     game.init();
     // Game loop?
     // Key down
@@ -18,6 +22,7 @@ function play() {
 
 
     document.addEventListener('keydown', (event) => {
+        event.preventDefault();
         tookAction = (tookAction || []);
         // Update the keys currently held 
         keys = (keys || []);
@@ -28,11 +33,11 @@ function play() {
         }
 
         if (event.code == 'ArrowLeft'){
-            leftDas = 0;
+            //leftDas = 0;
         }
 
         if (event.code == 'ArrowRight'){
-            rightDas = 0;
+            //rightDas = 0;
         }
         
     }, false);
@@ -40,6 +45,16 @@ function play() {
     document.addEventListener('keyup', (event) => {
         tookAction[event.code] = false;
         keys[event.code] = false;
+        
+        if (event.code == 'ArrowLeft'){
+            rightDas = 0;
+            leftDas = 0;
+        }
+
+        if (event.code == 'ArrowRight'){
+            leftDas = 0;
+            rightDas = 0;
+        }
     }, false);
 
     window.requestAnimationFrame(gameLoop);
@@ -74,19 +89,30 @@ function play() {
                 }
                 softDrop+=20;
             }
-            //sob wtf
+            // DAS
             if(keys['ArrowLeft']){
                 leftDas++;
-                if (leftDas >= 5){
+                if (leftDas > rightDas && rightDas >= das){ // If DAS left is possbile but DAS right was activated later then DAS right
+                    while(game.moveRight()){}
+                }
+                if (leftDas >= das && !keys['ArrowRight']){
                     while(game.moveLeft()){}
                 }
             }
             if(keys['ArrowRight']){
                 rightDas++;
-                if (rightDas >= 5){
+                if (rightDas > leftDas && leftDas >= das){ // If DAS right is possible but DAS left was activated later then DAS left
+                    while(game.moveLeft()){}
+                }
+                if (rightDas >= das && !keys['ArrowLeft']){
                     while(game.moveRight()){}
                 }
             }
+
+
+            // Expected behaviour: When left is held for more than 5 frames, das
+            // When DAS is activated, pressing right will move mino right anyway, ignore das & do not(?) reset DAS timer
+            // When left DAS is activated, DAS right will still activate witohut DAS left being cancelled
         }
         game.update_render();
         window.requestAnimationFrame(gameLoop);
