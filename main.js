@@ -60,6 +60,8 @@ function play() {
 
             if(tookAction['ShiftLeft'] !== true && keys['ShiftLeft']) {game.holdPiece(); tookAction['ShiftLeft'] = true;}
 
+            if(tookAction['KeyR'] !== true && keys['KeyR']) {game.init(); tookAction['KeyR'] = true;}
+            
             if(tookAction['Space'] !== true && keys['Space']) {
                 while(game.moveDown()){}
                 game.placePiece();
@@ -67,7 +69,7 @@ function play() {
             }
             if(keys['ArrowDown']) {
                 if (softDrop == 0){
-                    game.moveDown();
+                    while(game.moveDown()){};
                     tookAction['ArrowDown'] = true;
                 }
                 softDrop+=20;

@@ -82,6 +82,12 @@ class Game{
             }
         }
 
+        //draw ghost pieces
+        let r = this.y
+        while(this.isValid(this.piece, this.rotation, this.x, r)){r-=1;}
+        this.renderPiece(this.piece, this.rotation, this.x, r+1, 1);
+
+
         //draw grid lines
         this.ctx.lineWidth = GRID_SIZE/BLOCK_SIZE;
         this.ctx.strokeStyle = GRID_COLOUR;
@@ -145,7 +151,7 @@ class Game{
     update_render(){
         this.renderBoard();
         this.renderQueue();
-        this.renderPiece();
+        this.renderPiece(this.piece, this.rotation, this.x, this.y, 0);
         this.renderHold();
     }
 
@@ -183,11 +189,11 @@ class Game{
     }
 
     //piece
-    renderPiece(){
-        this.ctx.fillStyle = PIECE_COLOUR[this.piece];
+    renderPiece(piece, rotation, x, y, ghost){
+        this.ctx.fillStyle = ghost ? GHOST_COLOUR : PIECE_COLOUR[piece];
         for (let mino = 0; mino < 4; mino++){
-            let drawX = this.x + PIECE_X[this.piece][this.rotation][mino];
-            let drawY = SPAWNROW - this.y - PIECE_Y[this.piece][this.rotation][mino];
+            let drawX = x + PIECE_X[piece][rotation][mino];
+            let drawY = SPAWNROW - y - PIECE_Y[piece][rotation][mino];
             this.ctx.fillRect(drawX, drawY, 1, 1);
         }
     }
@@ -221,8 +227,7 @@ class Game{
             (x + PIECE_X[piece][rotation][2] > -1) +
             (x + PIECE_X[piece][rotation][3] > -1) !== 8) return false;
 
-        return (0 + 
-                (this.board[x + PIECE_X[piece][rotation][0]] [y + PIECE_Y[piece][rotation][0]] === 0) +
+        return ((this.board[x + PIECE_X[piece][rotation][0]] [y + PIECE_Y[piece][rotation][0]] === 0) +
                 (this.board[x + PIECE_X[piece][rotation][1]] [y + PIECE_Y[piece][rotation][1]] === 0) +
                 (this.board[x + PIECE_X[piece][rotation][2]] [y + PIECE_Y[piece][rotation][2]] === 0) +
                 (this.board[x + PIECE_X[piece][rotation][3]] [y + PIECE_Y[piece][rotation][3]] === 0) === 4);
