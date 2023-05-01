@@ -25,7 +25,7 @@ class Game{
         this.ctx = game_ctx;
         this.queue_ctx = queue_ctx;
         this.hold_ctx = hold_ctx;
-        this.grid;
+        this.board;
         this.piece; // Current falling piece type
         this.x;
         this.y;
@@ -34,8 +34,6 @@ class Game{
         this.canHold;
         this.bag;
         this.bagIndex;
-        this.keys;
-        this.tookAction;
     }
 
     // board
@@ -52,7 +50,7 @@ class Game{
     }
 
     init(){ //initialise stuff, reset all variables
-        this.grid = this.newBoard();
+        this.board = this.newBoard();
         this.bag = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7];
         this.sevenBag(true);
         this.sevenBag(false);
@@ -78,8 +76,8 @@ class Game{
         //draw existing pieces
         for (let i=0; i<COLS; i++){
             for (let j=0; j<ROWS; j++){
-                if(this.grid[i][j] == 0) continue;
-                this.ctx.fillStyle = PIECE_COLOUR[this.grid[i][j]];
+                if(this.board[i][j] == 0) continue;
+                this.ctx.fillStyle = PIECE_COLOUR[this.board[i][j]];
                 this.ctx.fillRect(i,ROWS-j-1,1,1);
             }
         }
@@ -174,7 +172,7 @@ class Game{
 
     placePiece(){ //places existing piece into board
         for (let mino = 0; mino < 4; mino++){
-            this.grid   [ this.x + PIECE_X[this.piece][this.rotation][mino] ]
+            this.board   [ this.x + PIECE_X[this.piece][this.rotation][mino] ]
                         [ this.y + PIECE_Y[this.piece][this.rotation][mino] ] = this.piece;
         }
         this.spawnPiece();
@@ -193,30 +191,31 @@ class Game{
             (x + PIECE_X[piece][rotation][3] > -1) !== 8) return false;
 
         return (0 + 
-                (this.grid[x + PIECE_X[piece][rotation][0]] [y + PIECE_Y[piece][rotation][0]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][1]] [y + PIECE_Y[piece][rotation][1]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][2]] [y + PIECE_Y[piece][rotation][2]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][3]] [y + PIECE_Y[piece][rotation][3]] === 0) === 4);
+                (this.board[x + PIECE_X[piece][rotation][0]] [y + PIECE_Y[piece][rotation][0]] === 0) +
+                (this.board[x + PIECE_X[piece][rotation][1]] [y + PIECE_Y[piece][rotation][1]] === 0) +
+                (this.board[x + PIECE_X[piece][rotation][2]] [y + PIECE_Y[piece][rotation][2]] === 0) +
+                (this.board[x + PIECE_X[piece][rotation][3]] [y + PIECE_Y[piece][rotation][3]] === 0) === 4);
     }
 
     moveLeft(){ // Moves the current piece left if it is a valid position, otherwise nothing happens
         if (this.isValid(this.piece, this.rotation, this.x - 1, this.y)){
-            
             this.x--;
+            return true;
         }
+        return false;
     }
 
     moveRight(){ // Moves the current piece right if it is a valid position, otherwise nothing happens
         if (this.isValid(this.piece, this.rotation, this.x + 1, this.y)){
-            
             this.x++;
+            return true;
         }
+        return false;
     }
 
     moveDown(){
         if (this.isValid(this.piece, this.rotation, this.x, this.y - 1)){
             this.y--;
-            
             return true;
         }
         return false
