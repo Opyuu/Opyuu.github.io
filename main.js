@@ -1,22 +1,29 @@
 //main.js
+
+var keys;
+var tookAction;
 var softDrop;
 var leftDas;
 var rightDas;
 
+game = new Game();
+gameRunning = false; //temp fix
 
 function play() {
-    game = new Game();
     game.init();
     // Game loop?
     // Key down
-    
+    if (gameRunning == true){return;}
+    gameRunning = true;
+
+
     document.addEventListener('keydown', (event) => {
-        game.tookAction = (game.tookAction || []);
+        tookAction = (tookAction || []);
         // Update the keys currently held 
-        game.keys = (game.keys || []);
-        game.keys[event.code] = true;  
+        keys = (keys || []);
+        keys[event.code] = true;  
         
-        if (event.code == 'ArrowDown' && game.tookAction['ArrowDown'] !== true){
+        if (event.code == 'ArrowDown' && tookAction['ArrowDown'] !== true){
             softDrop = 0
         }
 
@@ -28,87 +35,62 @@ function play() {
             rightDas = 0;
         }
         
-      }, false);
+    }, false);
 
-      document.addEventListener('keyup', (event) => {
-        game.tookAction[event.code] = false;
-        game.keys[event.code] = false;
+    document.addEventListener('keyup', (event) => {
+        tookAction[event.code] = false;
+        keys[event.code] = false;
+    }, false);
 
-      }, false);
-
-      window.requestAnimationFrame(gameLoop);
-      function gameLoop(){
+    window.requestAnimationFrame(gameLoop);
+    function gameLoop(){
         softDrop = softDrop % 5;
         // Only carry an action if tookaction is false and event code is true. Set keydown to false after carrying out the action
-        if (game.keys){
-            if(game.tookAction['ArrowLeft'] !== true && game.keys['ArrowLeft']) {game.moveLeft(); game.tookAction['ArrowLeft'] = true;}
-            if(game.tookAction['ArrowRight'] !== true && game.keys['ArrowRight']) {game.moveRight(); game.tookAction['ArrowRight'] = true;}
+        if (keys){
+            if(tookAction['ArrowLeft'] !== true && keys['ArrowLeft']) {game.moveLeft(); tookAction['ArrowLeft'] = true;}
+            if(tookAction['ArrowRight'] !== true && keys['ArrowRight']) {game.moveRight(); tookAction['ArrowRight'] = true;}
 
-            if(game.tookAction['ArrowUp'] !== true && game.keys['ArrowUp']) {game.rotateCW(); game.tookAction['ArrowUp'] = true;}
-            if(game.tookAction['KeyD'] !== true && game.keys['KeyD']) {game.rotateCW(); game.tookAction['KeyD'] = true;}
+            if(tookAction['ArrowUp'] !== true && keys['ArrowUp']) {game.rotateCW(); tookAction['ArrowUp'] = true;}
+            if(tookAction['KeyD'] !== true && keys['KeyD']) {game.rotateCW(); tookAction['KeyD'] = true;}
 
-            if(game.tookAction['KeyS'] !== true && game.keys['KeyS']) {game.rotateCCW(); game.tookAction['KeyS'] = true;}
-            if(game.tookAction['KeyZ'] !== true && game.keys['KeyZ']) {game.rotateCCW(); game.tookAction['KeyZ'] = true;}
+            if(tookAction['KeyS'] !== true && keys['KeyS']) {game.rotateCCW(); tookAction['KeyS'] = true;}
+            if(tookAction['KeyZ'] !== true && keys['KeyZ']) {game.rotateCCW(); tookAction['KeyZ'] = true;}
 
-            if(game.tookAction['KeyA'] !== true && game.keys['KeyA']) {game.rotate180(); game.tookAction['KeyA'] = true;}
+            if(tookAction['KeyA'] !== true && keys['KeyA']) {game.rotate180(); tookAction['KeyA'] = true;}
 
-            if(game.tookAction['ShiftLeft'] !== true && game.keys['ShiftLeft']) {game.holdPiece(); game.tookAction['ShiftLeft'] = true;}
+            if(tookAction['ShiftLeft'] !== true && keys['ShiftLeft']) {game.holdPiece(); tookAction['ShiftLeft'] = true;}
 
-            if(game.tookAction['Space'] !== true && game.keys['Space']) {
-                while(game.moveDown()){game.moveDown()}
+            if(tookAction['KeyR'] !== true && keys['KeyR']) {game.init(); tookAction['KeyR'] = true;}
+            
+            if(tookAction['Space'] !== true && keys['Space']) {
+                while(game.moveDown()){}
                 game.placePiece();
-                game.tookAction['Space'] = true;
+                tookAction['Space'] = true;
             }
-            if(game.keys['ArrowDown']) {
+            if(keys['ArrowDown']) {
                 if (softDrop == 0){
-                    game.moveDown();
-                    game.tookAction['ArrowDown'] = true;
+                    while(game.moveDown()){};
+                    tookAction['ArrowDown'] = true;
                 }
-                softDrop++;
+                softDrop+=20;
             }
-            if(game.keys['ArrowLeft']){
+            //sob wtf
+            if(keys['ArrowLeft']){
                 leftDas++;
-                if (leftDas >= 6){
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
-                    game.moveLeft();
+                if (leftDas >= 5){
+                    while(game.moveLeft()){}
                 }
             }
-
-            if(game.keys['ArrowRight']){
+            if(keys['ArrowRight']){
                 rightDas++;
-                if (rightDas >= 6){
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-                    game.moveRight();
-
+                if (rightDas >= 5){
+                    while(game.moveRight()){}
                 }
             }
         }
         game.update_render();
         window.requestAnimationFrame(gameLoop);
-      }
-
-      // Key up
-      
-    
-    
+    }
+    // Key up
+    return;
 }

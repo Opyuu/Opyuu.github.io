@@ -25,7 +25,7 @@ class Game{
         this.ctx = game_ctx;
         this.queue_ctx = queue_ctx;
         this.hold_ctx = hold_ctx;
-        this.grid;
+        this.board;
         this.piece; // Current falling piece type
         this.x;
         this.y;
@@ -34,8 +34,6 @@ class Game{
         this.canHold;
         this.bag;
         this.bagIndex;
-        this.keys;
-        this.tookAction;
     }
 
     // board
@@ -43,8 +41,8 @@ class Game{
         let temp = Array.from(
             {length: COLS}, () => Array(ROWS).fill(0)
         );
-        for (let i=0; i<COLS; i++){
-            for (let j=0; j<ROWS; j++){
+        for (let i = 0; i < COLS; i++){
+            for (let j = 0; j < ROWS; j++){
                 temp[i][j] = 0;
             }
         }
@@ -52,7 +50,7 @@ class Game{
     }
 
     init(){ //initialise stuff, reset all variables
-        this.grid = this.newBoard();
+        this.board = this.newBoard();
         this.bag = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7];
         this.sevenBag(true);
         this.sevenBag(false);
@@ -76,23 +74,29 @@ class Game{
         this.ctx.fillRect(0, 4, 10, 20);
 
         //draw existing pieces
-        for (let i=0; i<COLS; i++){
-            for (let j=0; j<ROWS; j++){
-                if(this.grid[i][j] == 0) continue;
-                this.ctx.fillStyle = PIECE_COLOUR[this.grid[i][j]];
+        for (let i = 0; i < COLS; i++){
+            for (let j = 0; j < ROWS; j++){
+                if(this.board[i][j] == 0) continue;
+                this.ctx.fillStyle = PIECE_COLOUR[this.board[i][j]];
                 this.ctx.fillRect(i,ROWS-j-1,1,1);
             }
         }
+
+        //draw ghost pieces
+        let r = this.y
+        while(this.isValid(this.piece, this.rotation, this.x, r)){r-=1;}
+        this.renderPiece(this.piece, this.rotation, this.x, r+1, 1);
+
 
         //draw grid lines
         this.ctx.lineWidth = GRID_SIZE/BLOCK_SIZE;
         this.ctx.strokeStyle = GRID_COLOUR;
         this.ctx.beginPath();
-        for (let i=1; i<COLS; i++){ //horizontal
+        for (let i = 1; i < COLS; i++){ //horizontal
             this.ctx.moveTo(i,4);
             this.ctx.lineTo(i,ROWS);
         }
-        for (let j=ROWS-1; j>3; j--){ //vertical
+        for (let j = ROWS - 1; j > 3; j--){ //vertical
             this.ctx.moveTo(0,j);
             this.ctx.lineTo(10,j);
         }
@@ -114,10 +118,40 @@ class Game{
         this.ctx.stroke();
     }
 
+    clearLines(){
+        //i kinda don't like this way of memory access but whatever
+        //[0 [0 [0 [0
+        // 0  0  0  0
+        // 0  0  0  0
+        // 1] 1] 1] 1]
+        // rather than
+        //[0  0  0  0]
+        //[0  0  0  0]
+        //[0  0  0  0]
+        //[1  1  1  1]
+        for (let row = 0; row < ROWS; row++){
+            let temp = 1;
+            for (let col = 0; col < COLS; col++){
+                temp *= this.board[col][row]; //if there is hole, it would = 0
+            }
+
+            if (temp !== 0){ //there are no holes in a line
+                //better memory access
+                for (let col2 = 0; col2 < COLS; col2++){
+                    for (let row2 = row; row2 < SPAWNROW; row2++){
+                        this.board[col2][row2] = this.board[col2][row2+1];
+                    }
+                    this.board[col2][ROWS] = 0;
+                }
+                row--;
+            }
+        }
+    }
+
     update_render(){
         this.renderBoard();
         this.renderQueue();
-        this.renderPiece();
+        this.renderPiece(this.piece, this.rotation, this.x, this.y, 0);
         this.renderHold();
     }
 
@@ -155,11 +189,11 @@ class Game{
     }
 
     //piece
-    renderPiece(){
-        this.ctx.fillStyle = PIECE_COLOUR[this.piece];
+    renderPiece(piece, rotation, x, y, ghost){
+        this.ctx.fillStyle = ghost ? GHOST_COLOUR : PIECE_COLOUR[piece];
         for (let mino = 0; mino < 4; mino++){
-            let drawX = this.x + PIECE_X[this.piece][this.rotation][mino];
-            let drawY = SPAWNROW - this.y - PIECE_Y[this.piece][this.rotation][mino];
+            let drawX = x + PIECE_X[piece][rotation][mino];
+            let drawY = SPAWNROW - y - PIECE_Y[piece][rotation][mino];
             this.ctx.fillRect(drawX, drawY, 1, 1);
         }
     }
@@ -174,9 +208,10 @@ class Game{
 
     placePiece(){ //places existing piece into board
         for (let mino = 0; mino < 4; mino++){
-            this.grid   [ this.x + PIECE_X[this.piece][this.rotation][mino] ]
+            this.board   [ this.x + PIECE_X[this.piece][this.rotation][mino] ]
                         [ this.y + PIECE_Y[this.piece][this.rotation][mino] ] = this.piece;
         }
+        this.clearLines();
         this.spawnPiece();
         this.canHold = true;
     }
@@ -192,31 +227,31 @@ class Game{
             (x + PIECE_X[piece][rotation][2] > -1) +
             (x + PIECE_X[piece][rotation][3] > -1) !== 8) return false;
 
-        return (0 + 
-                (this.grid[x + PIECE_X[piece][rotation][0]] [y + PIECE_Y[piece][rotation][0]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][1]] [y + PIECE_Y[piece][rotation][1]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][2]] [y + PIECE_Y[piece][rotation][2]] === 0) +
-                (this.grid[x + PIECE_X[piece][rotation][3]] [y + PIECE_Y[piece][rotation][3]] === 0) === 4);
+        return ((this.board[x + PIECE_X[piece][rotation][0]] [y + PIECE_Y[piece][rotation][0]] === 0) +
+                (this.board[x + PIECE_X[piece][rotation][1]] [y + PIECE_Y[piece][rotation][1]] === 0) +
+                (this.board[x + PIECE_X[piece][rotation][2]] [y + PIECE_Y[piece][rotation][2]] === 0) +
+                (this.board[x + PIECE_X[piece][rotation][3]] [y + PIECE_Y[piece][rotation][3]] === 0) === 4);
     }
 
     moveLeft(){ // Moves the current piece left if it is a valid position, otherwise nothing happens
         if (this.isValid(this.piece, this.rotation, this.x - 1, this.y)){
-            
             this.x--;
+            return true;
         }
+        return false;
     }
 
     moveRight(){ // Moves the current piece right if it is a valid position, otherwise nothing happens
         if (this.isValid(this.piece, this.rotation, this.x + 1, this.y)){
-            
             this.x++;
+            return true;
         }
+        return false;
     }
 
     moveDown(){
         if (this.isValid(this.piece, this.rotation, this.x, this.y - 1)){
             this.y--;
-            
             return true;
         }
         return false
