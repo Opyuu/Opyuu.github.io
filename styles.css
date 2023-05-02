@@ -1,7 +1,7 @@
 /*styles.css*/
 
 * {
-    font-family: Arial;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: white;
 }
 
@@ -15,18 +15,30 @@ body {
     align-items: center;
 }
 
-/* .m_stage {
-    grid-template-columns: 320px 200px;
-} */
-
-.r_stage {
-    display: flex;
+#r_stage {
+    display: flex; 
     align-items: center;
 }
 
-.play-button{
-    background-color: green;
+.button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: grey;
+    color: white;
     font-size: 20px;
-    padding: 15px 30px;
+
+    width: 150px;
+    height: 80px;
+
+    border: none;
+
     cursor: pointer;
+}
+
+.button_hover:hover{
+    background-color: darkgrey;
+    color: black;
 }

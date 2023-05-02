@@ -9,7 +9,7 @@ game_ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 
 const queue_canvas = document.getElementById("queue");
 const queue_ctx = queue_canvas.getContext("2d");
-queue_ctx.canvas.width = 5 * BLOCK_SIZE;
+queue_ctx.canvas.width = 6 * BLOCK_SIZE;
 queue_ctx.canvas.height = 16 * BLOCK_SIZE;
 queue_ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 
@@ -157,15 +157,11 @@ class Game{
 
     //queue
     clearQueue(){
-        this.queue_ctx.clearRect(0, 0, 5, 16);
+        this.queue_ctx.clearRect(0, 0, 6, 16);
     }
 
     renderQueue(){
         this.clearQueue();
-
-        //draw background
-        // this.queue_ctx.fillStyle = BACKGROUND_COLOUR;
-        // this.queue_ctx.fillRect(0, 0, 4, 15);
 
         //draw pieces
         let y_offset = 1;

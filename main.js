@@ -120,3 +120,8 @@ function play() {
     // Key up
     return;
 }
+
+
+function settings(){
+    
+}
