@@ -8,16 +8,19 @@
 
     <body>
     <div id="stage">
-        <div class="l_stage">
-            <canvas id="hold" class="hold"></canvas>
+        <div id="l_stage">
+            <canvas id="hold"></canvas>
         </div>
-        <div class="m_stage">
-            <canvas id="board" class="board"></canvas>
+        <div id="m_stage">
+            <canvas id="board"></canvas>
         </div>
         
-        <div class="r_stage">
-            <canvas id = "queue" class="queue"></canvas>
-            <button onclick="play()" class="play-button">New Game</button>
+        <div id="r_stage">
+            <canvas id = "queue"></canvas>
+            <div id="buttons">
+                <button onclick="play()" id="start_button" class="button button_hover">New Game</button>
+                <button onclick="settings()" id="setting_button" class="button button_hover">Settings</button>
+            </div>
         </div>
     </div>
 
