@@ -1,4 +1,5 @@
 # Opyuu.github.io
-Think
 
-watafak readme.misdrop
+https://opyuu.github.io/
+
+Online block-stacker in the same genre as Tetris®

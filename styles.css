@@ -42,3 +42,24 @@ body {
     background-color: darkgrey;
     color: black;
 }
+
+
+#settings{
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: lightgray;
+    width: 60vw;
+    height: 80vh;
+}
+
+.title{
+    text-align: center;
+    color: black;
+}
+
+.controls{
+    color:black;
+}

@@ -22,6 +22,63 @@
                 <button onclick="settings()" id="setting_button" class="button button_hover">Settings</button>
             </div>
         </div>
+
+        <div id="settings" class="settings">
+            <h1 class = "title">settings</h1>
+        
+            <label for="DAS">DAS: (In frames) (Doesn't save)</label>
+            <input type="number" name="DAS" id="DAS" class="controls">
+            <br><br>
+
+            <label for="SDARR">Soft Drop ARR: (In frames) (Doesn't save)</label>
+            <input type="number" name="SDARR" id="SDARR" class="controls">
+            <br><br>
+
+            <label for="Move_Left">Move Left:</label>
+            <button type="button" name="Move_Left" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Move_Right">Move Right:</label>
+            <button type="button" name="Move_Right" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Move_Down">Soft Drop:</label>
+            <button type="button" name="Move_Down" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Rotate_CW">CW Rotation:</label>
+            <button type="button" name="Rotate_CW" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Rotate_CW_Secondary">CW Rotation (Secondary):</label>
+            <button type="button" name="Rotate_CW_Secondary" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Rotate_CCW">CCW Rotation:</label>
+            <button type="button" name="Rotate_CCW" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Rotate_CCW_Secondary">CCW Rotation (Secondary):</label>
+            <button type="button" name="Rotate_CCW_Secondary" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Rotate_180">180 Rotation:</label>
+            <button type="button" name="Rotate_180" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Hold">Hold:</label>
+            <button type="button" name="Hold" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Hard_Drop">Hard Drop:</label>
+            <button type="button" name="Hard_Drop" class="controls" onclick="change(this)"></button>
+            <br><br>
+
+            <label for="Reset">Reset:</label>
+            <button type="button" name="Reset" class="controls" onclick="change(this)"></button>
+            <br><br>
+            <button onclick="settings() ">Save & Close</button>
+        </div>
     </div>
 
 
