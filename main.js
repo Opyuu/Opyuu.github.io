@@ -50,7 +50,7 @@ function play() {
         if (showSetting) return; // If settings menu is shown do not take inputs
         keys[event.code] = true;  
         
-        if (event.code == 'ArrowDown' && tookAction['ArrowDown'] !== true){
+        if (event.code == controls['Move_Down'] && tookAction[controls['Move_Down']] !== true){
             softDrop = 0
         }
         
