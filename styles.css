@@ -63,3 +63,8 @@ body {
 .controls{
     color:black;
 }
+
+.labels{
+    color: black;
+    margin-left: 5%;
+}
