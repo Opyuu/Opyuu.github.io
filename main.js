@@ -70,26 +70,16 @@ function play() {
     function gameLoop(){
         // Only carry an action if tookaction is false and event code is true. Set keydown to false after carrying out the action
         if (keys){
-            if(tookAction[controls['Move_Left']] !== true && keys[controls['Move_Left']]) {game.moveLeft(); tookAction[controls['Move_Left']] = true;}
-            if(tookAction[controls['Move_Right']] !== true && keys[controls['Move_Right']]) {game.moveRight(); tookAction[controls['Move_Right']] = true;}
-
-            if(tookAction[controls['Rotate_CW']] !== true && keys[controls['Rotate_CW']]) {game.rotateCW(); tookAction[controls['Rotate_CW']] = true;}
-            if(tookAction[controls['Rotate_CW_Secondary']] !== true && keys[[controls['Rotate_CW_Secondary']]]) {game.rotateCW(); tookAction[controls['Rotate_CW_Secondary']] = true;}
-
-            if(tookAction[controls['Rotate_CCW']] !== true && keys[controls['Rotate_CCW']]) {game.rotateCCW(); tookAction[controls['Rotate_CCW']] = true;}
-            if(tookAction[controls['Rotate_CCW_Secondary']] !== true && keys[controls['Rotate_CCW_Secondary']]) {game.rotateCCW(); tookAction[controls['Rotate_CCW_Secondary']] = true;}
-
-            if(tookAction[controls['Rotate_180']] !== true && keys[controls['Rotate_180']]) {game.rotate180(); tookAction[controls['Rotate_180']] = true;}
-
-            if(tookAction[controls['Hold']] !== true && keys[controls['Hold']]) {game.holdPiece(); tookAction[controls['Hold']] = true;}
-
-            if(tookAction[controls['Reset']] !== true && keys[controls['Reset']]) {game.init(); tookAction[controls['Reset']] = true;}
-            
-            if(tookAction[controls['Hard_Drop']] !== true && keys[controls['Hard_Drop']]) {
+            // Hard drop first
+            if(tookAction[controls['Hard_Drop']] !== true && keys[controls['Hard_Drop']]) { 
                 while(game.moveDown()){}
                 game.placePiece();
                 tookAction[controls['Hard_Drop']] = true;
             }
+            // Hold Second
+            if(tookAction[controls['Hold']] !== true && keys[controls['Hold']]) {game.holdPiece(); tookAction[controls['Hold']] = true;}
+
+            // Soft Drop Thirds
             if(keys[controls['Move_Down']]) {
                 softDrop++;
                 if (softDrop >= sdARR){ // 
@@ -99,9 +89,9 @@ function play() {
                     game.moveDown();
                     softDrop = 0; // Set reset Soft drop
                 }
-                
             }
-            // DAS
+
+            // DAS fourth
             if(keys[controls['Move_Left']]){
                 leftDas++;
                 if (leftDas > rightDas && rightDas >= das){ // If DAS left is possbile but DAS right was activated later then DAS right
@@ -121,6 +111,25 @@ function play() {
                 }
             }
 
+            // Movement 
+            if(tookAction[controls['Move_Left']] !== true && keys[controls['Move_Left']]) {game.moveLeft(); tookAction[controls['Move_Left']] = true;}
+            if(tookAction[controls['Move_Right']] !== true && keys[controls['Move_Right']]) {game.moveRight(); tookAction[controls['Move_Right']] = true;}
+
+            if(tookAction[controls['Rotate_CW']] !== true && keys[controls['Rotate_CW']]) {game.rotateCW(); tookAction[controls['Rotate_CW']] = true;}
+            if(tookAction[controls['Rotate_CW_Secondary']] !== true && keys[[controls['Rotate_CW_Secondary']]]) {game.rotateCW(); tookAction[controls['Rotate_CW_Secondary']] = true;}
+
+            if(tookAction[controls['Rotate_CCW']] !== true && keys[controls['Rotate_CCW']]) {game.rotateCCW(); tookAction[controls['Rotate_CCW']] = true;}
+            if(tookAction[controls['Rotate_CCW_Secondary']] !== true && keys[controls['Rotate_CCW_Secondary']]) {game.rotateCCW(); tookAction[controls['Rotate_CCW_Secondary']] = true;}
+
+            if(tookAction[controls['Rotate_180']] !== true && keys[controls['Rotate_180']]) {game.rotate180(); tookAction[controls['Rotate_180']] = true;}
+
+            
+            if(tookAction[controls['Reset']] !== true && keys[controls['Reset']]) {game.init(); tookAction[controls['Reset']] = true;}
+            
+            
+
+
+
 
             // Expected behaviour: When left is held for more than 5 frames, das
             // When DAS is activated, pressing right will move mino right anyway, ignore das & do not(?) reset DAS timer
@@ -135,10 +144,12 @@ function play() {
 
 function load_settings(){
     controls = localStorage.getItem("controls");
-    if (controls){ 
+    if (Object.keys(controls).length !== 0){ 
         controls = JSON.parse(controls);
+        console.log("loaded controls")
     }
     else{ // If no controls are stored, use default
+        console.log("Default controls used")
         controls = {   
             "DAS": 5,
             "SDARR": 0, // Change to regular ARR later?
@@ -186,13 +197,27 @@ function settings(){
 
 function change(button){
     const changeSetting = (e) => {
-        controls[button.name] = e.code;
-        console.log(controls, "a");
-        document.getElementsByName(button.name)[0].innerHTML = e.key;
-        document.removeEventListener('keydown', changeSetting); // Remove event listener after the setting has been set
+        e.preventDefault();
+        
+        if (Object.values(controls).includes(e.code)){
+            if(e.code == controls[button.name]){
+                controls[button.name] = e.code;
+                document.getElementsByName(button.name)[0].innerHTML = e.code;
+                document.removeEventListener('keydown', changeSetting); // Remove event listener after the setting has been set
+                return;
+            }
+            document.getElementsByName(button.name)[0].innerHTML = "That key is already used";
+
+        }
+        else{
+            controls[button.name] = e.code;
+            document.getElementsByName(button.name)[0].innerHTML = e.code;
+            document.removeEventListener('keydown', changeSetting); // Remove event listener after the setting has been set
+            return;
+        }
+        
     };
-    console.log(button.name);
-    console.log(buttons[0]);
+
     document.getElementsByName(button.name)[0].innerHTML = controls[button.name];
 
     document.addEventListener('keydown', changeSetting, false);
