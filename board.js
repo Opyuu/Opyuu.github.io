@@ -132,6 +132,7 @@ class Game{
         //[0  0  0  0]
         //[1  1  1  1]
         let clear = 0;
+        let maxHeight = 0;
         let tspin = false;
         let mini = true;
         if (this.piece == 7 && this.rotated == true){
@@ -166,12 +167,15 @@ class Game{
             }
         }
 
-
         for (let row = 0; row < ROWS; row++){
             let temp = 1;
+            let temp2 = false;
             for (let col = 0; col < COLS; col++){
-                temp *= this.board[col][row]; //if there is hole, it would = 0
+                temp  *= this.board[col][row]; //if there is hole, it would = 0
+                temp2 = (temp2 || (this.board[col][row] > 0));
             }
+            
+            maxHeight += temp2;
 
             if (temp !== 0){ //there are no holes in a line
                 //better memory access
@@ -182,6 +186,7 @@ class Game{
                     this.board[col2][ROWS] = 0;
                 }
                 row--;
+                maxHeight--;
                 clear++;
             }
         }
@@ -208,6 +213,7 @@ class Game{
                     break;
             }
         }
+        if (maxHeight == 0){console.log("perfect clear");}
     }
 
     update_render(){
