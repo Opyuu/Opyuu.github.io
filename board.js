@@ -30,6 +30,8 @@ class Game{
         this.x;
         this.y;
         this.rotation; // 0 = North, 1 = East, 2 = South, 3 = West
+        this.rotated;
+        this.kickFive;
         this.hold;
         this.canHold;
         this.bag;
@@ -129,6 +131,42 @@ class Game{
         //[0  0  0  0]
         //[0  0  0  0]
         //[1  1  1  1]
+        let clear = 0;
+        let tspin = false;
+        let mini = true;
+        if (this.piece == 7 && this.rotated == true){
+            let corners = [false, false, false, false, false]
+            if (this.x == -1 && this.rotation == 1){
+                corners[0] = corners[1] = true;
+                corners[2] = this.board[this.x+2][this.y-2] !== 0;
+                corners[3] = this.board[this.x  ][this.y-2] !== 0;
+            }
+            else if (this.x == 8 && this.rotation == 3){
+                corners[0] = this.board[this.x  ][this.y  ] !== 0;
+                corners[1] = this.board[this.x+2][this.y  ] !== 0;
+                corners[2] = corners[3] = true;
+            }
+            else{
+                corners[0] = this.board[this.x  ][this.y  ] !== 0;
+                corners[1] = this.board[this.x+2][this.y  ] !== 0;
+                corners[2] = this.board[this.x+2][this.y-2] !== 0;
+                corners[3] = this.board[this.x  ][this.y-2] !== 0;
+            }   
+
+            if (corners[0] +
+                corners[1] +
+                corners[2] +
+                corners[3] >= 3){tspin = true;}
+
+            corners[4] = corners[0];
+
+            if ((corners[this.rotation] == true && corners[this.rotation+1] == true)
+                || this.kickFive == true){
+                mini = false;
+            }
+        }
+
+
         for (let row = 0; row < ROWS; row++){
             let temp = 1;
             for (let col = 0; col < COLS; col++){
@@ -144,6 +182,30 @@ class Game{
                     this.board[col2][ROWS] = 0;
                 }
                 row--;
+                clear++;
+            }
+        }
+
+        if (clear == 4){console.log("quad");}
+        if (tspin){
+            switch(clear){
+                case 0:
+                    if (mini){console.log("tspin mini null");}
+                    else{console.log("tspin null");}
+                    break;
+                case 1:
+                    if (mini){console.log("tspin mini single");}
+                    else{console.log("tspin single");}
+                    break;
+                case 2:
+                    if (mini){console.log("tspin mini double");}
+                    else{console.log("tspin double");}
+                    break;
+                case 3:
+                    console.log("tspin triple");
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -199,6 +261,7 @@ class Game{
         this.y = 22;
         this.piece = this.bag[this.bagIndex];
         this.rotation = 0;
+        this.rotated = false;
         this.bagIncrement();
     }
 
@@ -232,6 +295,7 @@ class Game{
     moveLeft(){ // Moves the current piece left if it is a valid position, otherwise nothing happens
         if (this.isValid(this.piece, this.rotation, this.x - 1, this.y)){
             this.x--;
+            this.rotated = false;
             return true;
         }
         return false;
@@ -240,6 +304,7 @@ class Game{
     moveRight(){ // Moves the current piece right if it is a valid position, otherwise nothing happens
         if (this.isValid(this.piece, this.rotation, this.x + 1, this.y)){
             this.x++;
+            this.rotated = false;
             return true;
         }
         return false;
@@ -248,6 +313,7 @@ class Game{
     moveDown(){
         if (this.isValid(this.piece, this.rotation, this.x, this.y - 1)){
             this.y--;
+            this.rotated = false;
             return true;
         }
         return false
@@ -257,16 +323,19 @@ class Game{
         if (this.piece === 2)return; // O piece has no kicks and or rotations
 
         for (let kick = 0; kick < 5; kick++){
-                if ( this.isValid(this.piece, rotation_CW[this.rotation],
-                    this.x + CW_KICKS_X[+(this.piece==1)][this.rotation][kick], 
-                    this.y + CW_KICKS_Y[+(this.piece==1)][this.rotation][kick]) ){
+            if ( this.isValid(this.piece, rotation_CW[this.rotation],
+                this.x + CW_KICKS_X[+(this.piece==1)][this.rotation][kick], 
+                this.y + CW_KICKS_Y[+(this.piece==1)][this.rotation][kick]) ){
 
-                    this.x = this.x + CW_KICKS_X[+(this.piece==1)][this.rotation][kick];
-                    this.y = this.y + CW_KICKS_Y[+(this.piece==1)][this.rotation][kick];
-                    this.rotation = rotation_CW[this.rotation];
-                    
-                    return;
-                }
+                this.x = this.x + CW_KICKS_X[+(this.piece==1)][this.rotation][kick];
+                this.y = this.y + CW_KICKS_Y[+(this.piece==1)][this.rotation][kick];
+                this.rotation = rotation_CW[this.rotation];
+                this.rotated = true;
+
+                this.kickFive = kick == 5;
+
+                return;
+            }
         }
     }
 
@@ -281,7 +350,10 @@ class Game{
                 this.x = this.x + CCW_KICKS_X[+(this.piece==1)][this.rotation][kick];
                 this.y = this.y + CCW_KICKS_Y[+(this.piece==1)][this.rotation][kick];
                 this.rotation = rotation_CCW[this.rotation];
-                
+                this.rotated = true;
+
+                this.kickFive = kick == 5;
+
                 return;
             }
         }
@@ -298,7 +370,8 @@ class Game{
                 this.x = this.x + KICKS_180_X[this.rotation][kick];
                 this.y = this.y + KICKS_180_Y[this.rotation][kick];
                 this.rotation = rotation_180[this.rotation];
-
+                this.rotated = true;
+                
                 return;
             }  
         }
@@ -316,6 +389,7 @@ class Game{
             this.x = 3;
             this.y = 22;
             this.rotation = 0;
+            this.rotated = false;
         }
     }
 
