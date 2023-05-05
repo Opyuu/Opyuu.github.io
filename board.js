@@ -332,7 +332,7 @@ class Game{
                 this.rotation = rotation_CW[this.rotation];
                 this.rotated = true;
 
-                this.kickFive = kick == 5;
+                this.kickFive = kick == 4;
 
                 return;
             }
@@ -352,7 +352,7 @@ class Game{
                 this.rotation = rotation_CCW[this.rotation];
                 this.rotated = true;
 
-                this.kickFive = kick == 5;
+                this.kickFive = kick == 4;
 
                 return;
             }
