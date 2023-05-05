@@ -36,6 +36,8 @@ class Game{
         this.canHold;
         this.bag;
         this.bagIndex;
+        this.combo;
+        this.b2b;
     }
 
     // board
@@ -59,8 +61,9 @@ class Game{
         this.bagIndex = 0;
         this.hold = 0;
         this.canHold = true;
+        this.b2b = this.combo = -1;
         this.spawnPiece();
-        this.update_render();
+        //this.update_render();
     }
     
     clearBoard(){ // Removes entire playing field from the canvas
@@ -138,14 +141,14 @@ class Game{
         if (this.piece == 7 && this.rotated == true){
             let corners = [false, false, false, false, false]
             if (this.x == -1 && this.rotation == 1){
-                corners[0] = corners[1] = true;
+                corners[0] = corners[3] = true;
+                corners[1] = this.board[this.x+2][this.y  ] !== 0;
                 corners[2] = this.board[this.x+2][this.y-2] !== 0;
-                corners[3] = this.board[this.x  ][this.y-2] !== 0;
             }
             else if (this.x == 8 && this.rotation == 3){
+                corners[1] = corners[2] = true;
                 corners[0] = this.board[this.x  ][this.y  ] !== 0;
-                corners[1] = this.board[this.x+2][this.y  ] !== 0;
-                corners[2] = corners[3] = true;
+                corners[3] = this.board[this.x  ][this.y-2] !== 0;
             }
             else{
                 corners[0] = this.board[this.x  ][this.y  ] !== 0;
@@ -191,29 +194,68 @@ class Game{
             }
         }
 
-        if (clear == 4){console.log("quad");}
         if (tspin){
             switch(clear){
                 case 0:
-                    if (mini){console.log("tspin mini null");}
-                    else{console.log("tspin null");}
+                    if (mini){update_clear("T-Spin Mini Null");}
+                    else{update_clear("T-Spin Null");}
                     break;
                 case 1:
-                    if (mini){console.log("tspin mini single");}
-                    else{console.log("tspin single");}
+                    this.b2b++;
+                    if (mini){update_clear("T-Spin Mini Single");}
+                    else{update_clear("T-Spin Single");}
                     break;
                 case 2:
-                    if (mini){console.log("tspin mini double");}
-                    else{console.log("tspin double");}
+                    this.b2b++;
+                    if (mini){update_clear("T-Spin Mini Double");}
+                    else{update_clear("T-Spin Double");}
                     break;
                 case 3:
-                    console.log("tspin triple");
+                    this.b2b++
+                    update_clear("T-Spin Triple");
                     break;
                 default:
                     break;
             }
         }
-        if (maxHeight == 0){console.log("perfect clear");}
+        else{
+            
+            switch(clear){
+                case 1:
+                    this.b2b = -1;
+                    update_clear("Single");
+                    break;
+
+                case 2:
+                    this.b2b = -1;
+                    update_clear("Double");
+                    break;
+
+                case 3:
+                    this.b2b = -1;
+                    update_clear("Triple");
+                    break;
+
+                case 4:
+                    this.b2b++;
+                    update_clear("Quad");
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (maxHeight == 0){update_pc();}
+
+        update_b2b(this.b2b);
+
+        if (clear == 0){this.combo = -1}
+        else{
+            
+            this.combo++;
+            if (this.combo > 0){
+                update_combo(this.combo);
+            }
+        }
     }
 
     update_render(){

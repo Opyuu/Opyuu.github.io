@@ -68,3 +68,9 @@ body {
     color: black;
     margin-left: 5%;
 }
+
+.clear{
+    width: 100px;
+    height: 50px;
+    font-size: medium;
+}
