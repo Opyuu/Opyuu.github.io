@@ -265,7 +265,6 @@ class Game{
                     this.y = this.y + CW_KICKS_Y[+(this.piece==1)][this.rotation][kick];
                     this.rotation = rotation_CW[this.rotation];
                     
-                    
                     return;
                 }
         }
@@ -290,6 +289,7 @@ class Game{
 
     rotate180(){
         if (this.piece === 2) return; // O piece has no kicks and or rotations
+
         for (let kick = 0; kick < 6; kick++){
             if ( this.isValid(this.piece, rotation_180[this.rotation],
                 this.x + KICKS_180_X[this.rotation][kick],
@@ -311,6 +311,11 @@ class Game{
         this.canHold = false;
         if(this.piece === 0){
             this.spawnPiece();
+        }
+        else{
+            this.x = 3;
+            this.y = 22;
+            this.rotation = 0;
         }
     }
 
