@@ -248,6 +248,7 @@ function change(button){
 
 function on_load(){
     load_settings();
+    console.log("Use parse_fumen('fumen') when a new game is started to load a fumen.")
 }
 
 
@@ -269,4 +270,40 @@ function update_combo(combo){
 function update_b2b(b2b){
     if (b2b > 0){document.getElementById("b2b_text").innerHTML = "B2B: " + b2b;}
     else{document.getElementById("b2b_text").innerHTML = "";}
+}
+
+
+function parse_fumen(fumen){
+    let minoCounter = 0;
+
+    let splitFumen = fumen.split("@")[1]; // Remove version header
+    splitFumen = splitFumen.substring(0, splitFumen.length - 3); // Remove piece appended at end
+    splitFumen = splitFumen.replace(/[?]/g, ''); // Remove ? separators
+    pairs = splitFumen.match(/.{2}/g); // Split fumen into pairs
+    console.log(pairs);
+    console.log(pairs.length)
+    for (let i = 0; i < pairs.length; i++){ // Loop through pairs
+        value1 = ENCODE_TABLE.indexOf(pairs[i][0]);
+        value2 = ENCODE_TABLE.indexOf(pairs[i][1]);
+
+        console.log(pairs[i][0], pairs[i][1]);
+        // Calculate num & the corresponding piece values
+        let num = value1 + value2 * 64;
+        console.log(value1, value2, num);
+
+        pieceType = Math.abs(Math.floor(num / 240 - 8));
+        pieceCount = num % 240 + 1;
+        //console.log (pieceCount);
+        
+        // Place piece onto board
+        for (let j = 0; j < pieceCount; j++){
+            let newPos = j + minoCounter;
+            let x = newPos % 10;
+            let y = 22 - Math.floor(newPos / 10);
+            //console.log(x,y,pieceType)
+            if(y < 0) return; // Last piece
+            game.board[x][y] = FUMEN_PIECE[pieceType];
+        }
+        minoCounter = minoCounter + pieceCount;
+    }
 }

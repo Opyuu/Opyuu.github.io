@@ -4,7 +4,7 @@
 const game_canvas = document.getElementById("board");
 const game_ctx = game_canvas.getContext("2d");
 game_ctx.canvas.width = COLS * BLOCK_SIZE;
-game_ctx.canvas.height = ROWS * BLOCK_SIZE;
+game_ctx.canvas.height = RENDER_ROWS * BLOCK_SIZE;
 game_ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 
 const queue_canvas = document.getElementById("queue");
@@ -80,10 +80,10 @@ class Game{
 
         //draw existing pieces
         for (let i = 0; i < COLS; i++){
-            for (let j = 0; j < ROWS; j++){
+            for (let j = 0; j < RENDER_ROWS; j++){
                 if(this.board[i][j] == 0) continue;
                 this.ctx.fillStyle = PIECE_COLOUR[this.board[i][j]];
-                this.ctx.fillRect(i,ROWS-j-1,1,1);
+                this.ctx.fillRect(i,RENDER_ROWS-j-1,1,1);
             }
         }
 
@@ -99,9 +99,9 @@ class Game{
         this.ctx.beginPath();
         for (let i = 1; i < COLS; i++){ //horizontal
             this.ctx.moveTo(i,4);
-            this.ctx.lineTo(i,ROWS);
+            this.ctx.lineTo(i,RENDER_ROWS);
         }
-        for (let j = ROWS - 1; j > 3; j--){ //vertical
+        for (let j = RENDER_ROWS - 1; j > 3; j--){ //vertical
             this.ctx.moveTo(0,j);
             this.ctx.lineTo(10,j);
         }
@@ -170,6 +170,7 @@ class Game{
             }
         }
 
+        //for (let col = 0; col < COLS; col++)this.board[col][39] = 0;
         for (let row = 0; row < ROWS; row++){
             let temp = 1;
             let temp2 = false;
@@ -183,7 +184,7 @@ class Game{
             if (temp !== 0){ //there are no holes in a line
                 //better memory access
                 for (let col2 = 0; col2 < COLS; col2++){
-                    for (let row2 = row; row2 < SPAWNROW; row2++){
+                    for (let row2 = row; row2 < ROWS; row2++){
                         this.board[col2][row2] = this.board[col2][row2+1];
                     }
                     this.board[col2][ROWS] = 0;
