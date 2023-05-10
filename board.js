@@ -170,7 +170,6 @@ class Game{
             }
         }
 
-        //for (let col = 0; col < COLS; col++)this.board[col][39] = 0;
         for (let row = 0; row < ROWS; row++){
             let temp = 1;
             let temp2 = false;
@@ -180,14 +179,13 @@ class Game{
             }
             
             maxHeight += temp2;
-
             if (temp !== 0){ //there are no holes in a line
                 //better memory access
                 for (let col2 = 0; col2 < COLS; col2++){
                     for (let row2 = row; row2 < ROWS; row2++){
                         this.board[col2][row2] = this.board[col2][row2+1];
                     }
-                    this.board[col2][ROWS] = 0;
+                    this.board[col2][ROWS-1] = 0;
                 }
                 row--;
                 maxHeight--;
@@ -306,12 +304,15 @@ class Game{
     }
 
     spawnPiece(){ //spawn piece
+        
         this.x = 3;
         this.y = 22;
         this.piece = this.bag[this.bagIndex];
         this.rotation = 0;
         this.rotated = false;
         this.bagIncrement();
+
+        if(!this.isValid(this.piece, this.rotation, this.x, this.y)) console.log("Game over");
     }
 
     placePiece(){ //places existing piece into board
@@ -367,6 +368,8 @@ class Game{
         }
         return false
     }
+
+    
 
     rotateCW(){
         if (this.piece === 2)return; // O piece has no kicks and or rotations

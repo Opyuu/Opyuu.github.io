@@ -2,6 +2,9 @@
 content = document.getElementsByClassName("settings")[0];
 buttons = content.getElementsByTagName("button");
 playButton = document.getElementById("start_button");
+var clearTextTimeout;
+var clearPCTimeout;
+var clearComboTimeout;
 var keys;
 var tookAction;
 var softDrop;
@@ -9,9 +12,6 @@ var leftDas;
 var rightDas;
 var das;
 var showSetting = false;
-var clearTextTimer = 0;
-var clearPCText = 0;
-var clearComboText = 0;
 var controls = {   
     "DAS": 5,
     "SDARR": 0, // Change to regular ARR later?
@@ -129,31 +129,10 @@ function play() {
             
             if(tookAction[controls['Reset']] !== true && keys[controls['Reset']]) {game.init(); tookAction[controls['Reset']] = true;}
             
-            
-
-
-
-
             // Expected behaviour: When left is held for more than 5 frames, das
             // When DAS is activated, pressing right will move mino right anyway, ignore das & do not(?) reset DAS timer
             // When left DAS is activated, DAS right will still activate witohut DAS left being cancelled
         }
-        
-        if (clearTextTimer > 0){
-            clearTextTimer--;
-        }
-        else{document.getElementById("clear_text").innerHTML = "";}
-
-        if (clearPCText>0){
-            clearPCText--;
-        }
-        else{document.getElementById("all_clear_text").innerHTML = "";}
-
-        if (clearComboText>0){
-            clearComboText--;
-        }
-        else{document.getElementById("combo_text").innerHTML = "";}
-
         game.update_render();
         window.requestAnimationFrame(gameLoop);
     }
@@ -253,18 +232,32 @@ function on_load(){
 
 
 function update_clear(clear){
+    try{clearTimeout(clearTextTimeout);}
+    catch{}
     document.getElementById("clear_text").innerHTML = clear;
-    clearTextTimer = 120;
+    clearTextTimeout = setTimeout(function timeout(){
+        document.getElementById("clear_text").innerHTML = "";
+    }, 2000);
+    
 }
 
 function update_pc(){
+    try{clearTimeout(clearPCTimeout);}
+    catch{}
     document.getElementById("all_clear_text").innerHTML = "Perfect Clear";
-    clearPCText = 120;
+
+    clearPCTimeout = setTimeout(function timeout(){
+        document.getElementById("all_clear_text").innerHTML = "";
+    }, 2000);
 }
 
 function update_combo(combo){
+    try{clearTimeout(clearComboTimeout);}
+    catch{}
     document.getElementById("combo_text").innerHTML = combo + "\n combo";
-    clearComboText = 120;
+    clearComboTimeout = setTimeout(function timeout(){
+        document.getElementById("combo_text").innerHTML = "";
+    }, 2000);
 }
 
 function update_b2b(b2b){
@@ -306,4 +299,14 @@ function parse_fumen(fumen){
         }
         minoCounter = minoCounter + pieceCount;
     }
+}
+
+function arrLeft(ARR){
+    let loop = setInterval(function() {
+        if (das > controls["DAS"]){ // IF ARR IS POSSIBLE
+            game.moveLeft();
+        }else{ // IF ARR IS NOT POSSIBLE
+            clearInterval(loop);
+        }
+    }, ARR);
 }
