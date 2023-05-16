@@ -2,4 +2,4 @@
 
 https://opyuu.github.io/
 
-Online block-stacker in the same genre as Tetris®
+Welcome to Opyu's Github page, where Opyu does random stuff
