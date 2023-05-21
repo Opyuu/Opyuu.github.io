@@ -1,5 +1,6 @@
 body{
     font-family: Verdana, sans-serif;
+    overflow: hidden;
 }
 
 .navbar{
@@ -59,6 +60,7 @@ body{
     right: 5%;
     top: 5%;
     width: 40%;
+    height: 100vh;
 }
 
 .not_found_right #subtext{
@@ -72,5 +74,8 @@ body{
 .not_found_right #image{
     width: 100%;
     height: auto;
+    object-fit: contain;
+    max-height: 85%;
+    left: 0;
 }
 
