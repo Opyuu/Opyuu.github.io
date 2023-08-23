@@ -1,9 +1,12 @@
+/* No Ena's colour lol */
+
 body{
     font-family: Verdana, sans-serif;
+    background-color: #E4A8CA; /* Mizuki */
 }
 
 .navbar{
-    background-color: #BB6588  ;
+    background-color: #BB6588; /* Kanade*/
     overflow: hidden;
     border-radius: 7px;
 }
@@ -20,7 +23,7 @@ body{
 
 .navbar a:hover{
     color: white;
-    background-color: #8889CC;
+    background-color: #8889CC; /* Mafuyu */
 }
 
 .mainbody{
@@ -44,14 +47,14 @@ body{
     margin-top: 500px;
     text-decoration: none;
     color: black;
-    background-color: #E4A8CA ;
+    background-color: #E4A8CA; /* Mizuki */
     padding: 11px 13px;
     border-radius: 7px;
     font-size: 25px;
 }
 
 .not_found_left #return_home:hover{
-    background-color: #884499 ;
+    background-color: #884499; /* Unit colour */
 }
 
 .not_found_right{
