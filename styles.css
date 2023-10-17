@@ -1,8 +1,9 @@
-/* No Ena's colour lol */
+@charset "UTF-8";
 
 body{
     font-family: Verdana, sans-serif;
     background-color: #E4A8CA; /* Mizuki */
+    overflow: hidden;
 }
 
 .navbar{
@@ -19,11 +20,63 @@ body{
     padding: 14px 16px;
     text-decoration: none;
     border-radius: 7px;
+    transition: 0.2s;
 }
 
 .navbar a:hover{
     color: white;
     background-color: #8889CC; /* Mafuyu */
+    transition: 0.2s;
+}
+
+#logo{
+    position: absolute;
+    right: 0;
+    top: 5%;
+}
+
+.monospace{
+    font-family: monospace;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+li{
+    padding-bottom: 5px;
+}
+
+#maintext{
+    width: 60%;
+}
+
+#wrapper{
+    max-width: 60%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.homeItem{
+    border: solid #884499;
+    background-color: #CCAA87;
+    border-radius: 5px;
+    width: 100%;
+    padding: 7px;
+    display: inline-block;
+    height: 100%;
+    transition: 0.2s;
+}
+
+.homeItem:hover{
+    background-color: #8889CC;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+
+.homeImg{
+    height: 100px;
+    width: auto;
 }
 
 .mainbody{
