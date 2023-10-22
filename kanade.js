@@ -84,17 +84,17 @@ const data = [
     },
 
     {
-        "LINK": "assets/images/__yoisaki_kanade_project_sekai_drawn_by_nong_345__2effc43d8dac78008214c8c4f0cd75b7.jpg",
+        "LINK": "assets/images/yoisaki_kanade_project_sekai_drawn_by_nong_345__2effc43d8dac78008214c8c4f0cd75b7.jpg",
         "SOURCE": "https://twitter.com/nong_345",
         "NAME": "nong_345"
     },
     {
-        "LINK": "assets/images/__yoisaki_kanade_project_sekai_drawn_by_paraffin__839e50ed2d3a000eba3aad93d2c8047f.jpg",
+        "LINK": "assets/images/yoisaki_kanade_project_sekai_drawn_by_paraffin__839e50ed2d3a000eba3aad93d2c8047f.jpg",
         "SOURCE": "https://twitter.com/1_PARA_9",
         "NAME": "PARAFFIN"
     },
     {
-        "LINK": "assets/images/__yoisaki_kanade_project_sekai_drawn_by_waka_wk4444__2d09f3216b20f8125751cd46b347de97.jpg",
+        "LINK": "assets/images/yoisaki_kanade_project_sekai_drawn_by_waka_wk4444__2d09f3216b20f8125751cd46b347de97.jpg",
         "SOURCE": "https://twitter.com/wk4444_",
         "NAME": "wk4444"
     }
