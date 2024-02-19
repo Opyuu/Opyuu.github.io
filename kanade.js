@@ -97,6 +97,15 @@ const data = [
         "LINK": "assets/images/yoisaki_kanade_project_sekai_drawn_by_waka_wk4444__2d09f3216b20f8125751cd46b347de97.jpg",
         "SOURCE": "https://twitter.com/wk4444_",
         "NAME": "wk4444"
+    },
+    {
+        "LINK": "assets/images/p0_mast1200.jpg",
+        "SOURCE": "https://www.pixiv.net/en/users/39581949",
+        "NAME": "iroha"
+    },
+    {
+        "LINK": "assets/images/p498u43iq7gy834t.jpeg",
+        "SOURCE": "https://www.pixiv.net/en/users/35947794",
+        "NAME": "Shikine Xion"
     }
-
 ];
