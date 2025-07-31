@@ -213,6 +213,7 @@ body {
 }
 
 .projectsText {
+    margin-top: 6px;
     flex-grow: 1;
     text-align: justify;
 }
@@ -224,12 +225,23 @@ body {
     border-radius: 5px;
     padding: 6px;
     height: 100%;
+    background-color: var(--mizuki);
+    z-index: 1;
+
+    box-shadow: -1px 1px 1px #00000050;
 }
 
 .projectsTitle {
-    margin: 5px;
+    background-origin: border-box;
+    background-color: var(--mafuyu);
+    padding-left: 11px;
+    padding-right: 11px;
+    margin: -6px;
+    margin-bottom: 0;
     display: flex;
     align-items: center;
+    border-radius: 2px;
+    z-index: 2;
 }
 
 .projectsBreak {
@@ -277,6 +289,7 @@ body {
 .projectsLink p {
     margin: 0;
     padding-right: 2px;
+    z-index: 1;
 }
 
 
