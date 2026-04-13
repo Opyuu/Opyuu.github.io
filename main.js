@@ -1,53 +1,64 @@
 let curMenu = 1;
 
+const img = document.getElementById("mainLogo");
 
-const img = document.getElementById('mainLogo');
+img.addEventListener("mousemove", (e) => {
+  const rect = img.getBoundingClientRect();
+  const cardCenterX = rect.left + rect.width / 2;
+  const cardCenterY = rect.top + rect.height / 2;
 
-img.addEventListener('mousemove', (e) => {
-    const rect = img.getBoundingClientRect();
-    const cardCenterX = rect.left + rect.width / 2;
-    const cardCenterY = rect.top + rect.height / 2;
+  // Calculate mouse position relative to card center
+  const mouseX = e.clientX - cardCenterX;
+  const mouseY = e.clientY - cardCenterY;
 
-    // Calculate mouse position relative to card center
-    const mouseX = e.clientX - cardCenterX;
-    const mouseY = e.clientY - cardCenterY;
+  // Calculate rotation values (adjust sensitivity as needed)
+  const rotateY = (mouseX / rect.width) * 40; // ±20 degrees max on X-axis
+  const rotateX = (-Math.abs(mouseY) / rect.height) * -35; // ±20 degrees max on Y-axis (inverted)
 
-    // Calculate rotation values (adjust sensitivity as needed)
-    const rotateY = (mouseX / rect.width) * 40;  // ±20 degrees max on X-axis
-    const rotateX = (-Math.abs(mouseY) / rect.height) * -35; // ±20 degrees max on Y-axis (inverted)
-
-    // Apply transformations
-    img.style.transform = `
+  // Apply transformations
+  img.style.transform = `
         rotateX(${rotateX}deg)
         rotateY(${rotateY}deg)
     `;
 });
 
-img.addEventListener('mouseleave', () => {
-    img.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+img.addEventListener("mouseleave", () => {
+  img.style.transform = "rotateX(0) rotateY(0) scale(1)";
 });
 
 function change_menu(menuNum) {
-    const curContent = document.getElementById(`content${curMenu}`);
-    const curNav = document.getElementById(`nav${curMenu}`);
-    const nextContent = document.getElementById(`content${menuNum}`);
-    const nextNav = document.getElementById(`nav${menuNum}`);
+  const curContent = document.getElementById(`content${curMenu}`);
+  const curNav = document.getElementById(`nav${curMenu}`);
+  const nextContent = document.getElementById(`content${menuNum}`);
+  const nextNav = document.getElementById(`nav${menuNum}`);
 
-    curNav.classList.remove('curNav');
-    nextNav.classList.add('curNav');
+  curNav.classList.remove("curNav");
+  nextNav.classList.add("curNav");
 
-    curContent.style.display = "none";
-    nextContent.style.display = "flex";
+  curContent.style.display = "none";
+  nextContent.style.display = "flex";
 
-    curMenu = menuNum;
+  curMenu = menuNum;
 }
 
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === '1')
-        change_menu(1);
-    else if (e.key === '2')
-        change_menu(2);
-    else if (e.key === '3')
-        change_menu(3);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "1") change_menu(1);
+  else if (e.key === "2") change_menu(2);
+  else if (e.key === "3") change_menu(3);
 });
+
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+const toScramble = document.getElementById("scramble");
+
+function randomiseText() {
+  let result = "";
+  const len = 10;
+
+  for (let i = 0; i < len; i++) {
+    result += letters[Math.floor(Math.random() * letters.length)];
+  }
+
+  toScramble.textContent = result;
+}
+
+setInterval(randomiseText, 10);
