@@ -47,18 +47,18 @@ document.addEventListener("keydown", (e) => {
   else if (e.key === "3") change_menu(3);
 });
 
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-const toScramble = document.getElementById("scramble");
-
-function randomiseText() {
-  let result = "";
-  const len = 10;
-
-  for (let i = 0; i < len; i++) {
-    result += letters[Math.floor(Math.random() * letters.length)];
-  }
-
-  toScramble.textContent = result;
-}
-
-setInterval(randomiseText, 10);
+// const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+// const toScramble = document.getElementById("scramble");
+//
+// function randomiseText() {
+//   let result = "";
+//   const len = 10;
+//
+//   for (let i = 0; i < len; i++) {
+//     result += letters[Math.floor(Math.random() * letters.length)];
+//   }
+//
+//   toScramble.textContent = result;
+// }
+//
+// setInterval(randomiseText, 10);
